@@ -61,7 +61,7 @@ function convertR(object, path, name) {
   }
 
   fileContent.push('}\n');
-  fs.writeFileSync(path + '.ts', fileContent.join('\n'));
+  fs.writeFileSync(path + '/' + name + '.ts', fileContent.join('\n'));
 }
 
 /**
