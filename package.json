@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "babel src -d lib",
-    "test": "node lib/json2ts.js src/example/object.json",
+    "test": "node lib/json2ts.js src/example/loop.json",
     "clean": "rm -rf array lib object ultimate",
     "all": "yarn clean && yarn build && yarn test"
   },
