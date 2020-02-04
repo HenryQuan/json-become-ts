@@ -14,9 +14,19 @@ if (argv.length === 0) {
 }
 
 /**
+ * Get the filename from path
+ * @param {string} jsonPath 
+ */
+function getJsonFileName(jsonPath) {
+  const temp = jsonPath.split('/');
+  return temp[temp.length - 1].replace('.json', '');
+} 
+
+/**
  * Show usage and exit the process
  */
 function showUsage() {
-  console.log('Usage: node json2ts.js [json_path] [folder_name]');
+  console.log(`Usage:
+node json2ts.js <file_path> [flat]`);
   process.exit();
 }
