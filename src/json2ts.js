@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { tsWritter } from './writter/tsWritter';
+import { writterTS } from './writter/writterTS';
 
 const argv = process.argv.slice(2);
 if (argv.length === 0) {
@@ -11,7 +11,7 @@ if (argv.length === 0) {
   const jsonObject = JSON.parse(file);
   
   const rootName = getJsonFileName(jsonPath);
-  const ts = new tsWritter();
+  const ts = new writterTS();
   ts.convertR(jsonObject, rootName, rootName);
 }
 
@@ -22,15 +22,6 @@ if (argv.length === 0) {
 function getJsonFileName(jsonPath) {
   const temp = jsonPath.split('/');
   return temp[temp.length - 1].replace('.json', '');
-}
-
-/**
- * Make the first char uppercase
- * - from https://stackoverflow.com/a/1026087
- * @param {string} name 
- */
-function upperFirst(name) {
-  return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
 /**

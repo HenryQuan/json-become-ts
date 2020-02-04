@@ -1,6 +1,7 @@
 import fs from 'fs';
+import { Utility } from './utility';
 
-class tsWritter {
+class writterTS {
   /**
    * Convert recursively
    * @param {any} object any json object
@@ -10,27 +11,27 @@ class tsWritter {
   convertR(object, path, name) {
     // Create a folder if doesn't exist to start conversion
     if (!fs.existsSync(path)) fs.mkdirSync(path);
-    const className = upperFirst(name);
+    const className = Utility.upperFirst(name);
     const fileContent = ['', `export interface ${className} {`];
 
     // Loop through object recursively and create new files and folders
     if (object.constructor === Array) {
       // If it is an array, only check if its first child
-      fileContent.push(`  ${name}: ${upperFirst(name)}[],`);
+      fileContent.push(`  ${name}: ${Utility.upperFirst(name)}[],`);
       if (object[0]) {
         // Check if it has anything inside, might be an empty array
         const newPath = path.split('/');
         newPath.push(name);
         const finalPath = newPath.join('/');
 
-        convertR(object[0], finalPath, name);
+        this.convertR(object[0], finalPath, name);
       }
     } else {
       for (const key in object) {
         const type = typeof object[key];
         console.log(type, key);
         if (type === 'object') {
-          const typeName = upperFirst(key);
+          const typeName = Utility.upperFirst(key);
           // add new line
           fileContent.push(`  ${key}: ${typeName},`);
           // add import
@@ -40,7 +41,7 @@ class tsWritter {
           newPath.push(key);
           const finalPath = newPath.join('/');
           // Go deeper
-          convertR(object[key], finalPath, key);
+          this.convertR(object[key], finalPath, key);
         } else {
           // create new files
           fileContent.push(`  ${key}: ${type}`);
@@ -53,4 +54,4 @@ class tsWritter {
   }
 }
 
-export { tsWritter };
+export { writterTS };

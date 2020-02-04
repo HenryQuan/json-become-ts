@@ -1,6 +1,9 @@
 {
   "scripts": {
-    "build": "babel src -d lib"
+    "build": "babel src -d lib",
+    "test": "node lib/json2ts.js src/example/object.json",
+    "clean": "rm -rf object lib",
+    "all": "yarn build && yarn test"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
