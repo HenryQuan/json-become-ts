@@ -30,7 +30,25 @@ class writterTS {
       for (const key in object) {
         const type = typeof object[key];
         console.log(type, key);
-        if (type === 'object') {
+        const value = object[key];
+        if (value.constructor === Array) {
+          // If it is an array, only check if its first child
+          if (value[0]) {
+            if (typeof value[0] === 'object') {
+              fileContent.push(`  ${key}: ${Utility.upperFirst(key)}[],`);
+              // Check if it has anything inside, might be an empty array
+              const newPath = path.split('/');
+              newPath.push(key);
+              const finalPath = newPath.join('/');
+      
+              this.convertR(value[0], finalPath, key);
+              fileContent.unshift(`import { ${Utility.upperFirst(key)} } from './${key}/${key}';`)
+            } else {
+              // Just write the type
+              fileContent.push(`  ${key}: ${typeof value[0]}[],`);
+            }
+          }
+        } else if (type === 'object') {
           const typeName = Utility.upperFirst(key);
           // add new line
           fileContent.push(`  ${key}: ${typeName},`);
@@ -51,6 +69,27 @@ class writterTS {
 
     fileContent.push('}\n');
     fs.writeFileSync(path + '/' + name + '.ts', fileContent.join('\n'));
+  }
+
+  /**
+   * Check for array and continue with recursion
+   * @param {any} object any json object
+   * @param {string} path current path
+   * @param {string} name used for class name
+   */
+  checkArray(object, path, name) {
+    if (object.constructor === Array) {
+      // If it is an array, only check if its first child
+      fileContent.push(`  ${name}: ${Utility.upperFirst(name)}[],`);
+      if (object[0]) {
+        // Check if it has anything inside, might be an empty array
+        const newPath = path.split('/');
+        newPath.push(name);
+        const finalPath = newPath.join('/');
+
+        this.convertR(object[0], finalPath, name);
+      }
+    } 
   }
 }
 
