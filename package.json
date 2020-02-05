@@ -1,8 +1,8 @@
 {
   "scripts": {
     "build": "babel src -d lib",
-    "test": "node lib/json2ts.js src/example/map.json",
-    "clean": "rm -rf array lib object ultimate map gameVersion",
+    "test": "node lib/json2ts.js src/example/ultimate.json --map",
+    "clean": "rm -rf array lib object ultimate testMap gameVersion",
     "all": "yarn clean && yarn build && yarn test"
   },
   "devDependencies": {

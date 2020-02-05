@@ -11,7 +11,7 @@ if (argv.length === 0) {
   const jsonObject = JSON.parse(file);
   
   const rootName = getJsonFileName(jsonPath);
-  const ts = new writterTS();
+  const ts = new writterTS(argv);
   ts.convertR(jsonObject, rootName, rootName);
 }
 
@@ -28,6 +28,6 @@ function getJsonFileName(jsonPath) {
  * Show usage and exit the process
  */
 function showUsage() {
-  console.log(`Usage:\nnode json2ts.js <file_path> [flat]`);
+  console.log(`Usage:\nnode json2ts.js <file_path> [--map]`);
   process.exit();
 }

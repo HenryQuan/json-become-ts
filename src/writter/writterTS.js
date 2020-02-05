@@ -2,6 +2,11 @@ import fs from 'fs';
 import { Utility } from './utility';
 
 class writterTS {
+  constructor(argv) {
+    if (argv[1]) {
+      this.useMap = true;
+    }
+  }
 
   /**
    * Convert recursively
@@ -15,7 +20,6 @@ class writterTS {
 
     const className = Utility.upperFirst(name);
     const fileContent = ['', `export interface ${className} {`];
-
     // Check if the root object is atually an array
     if (Array.isArray(object)) {
       fileContent.push(`  ${name}: ${className}[],`);
@@ -51,12 +55,30 @@ class writterTS {
             }
           }
         } else if (type === 'object') {
-          // added new type array and its import
-          fileContent.push(`  ${key}: ${keyClassName},`);
-          fileContent.unshift(`import { ${keyClassName} } from './${key}/${key}';`)
-          
-          // Go deeper
-          this.convertR(value, this.getNewPath(path, key), key);
+          if (this.useMap) {
+            // loop through object and check if all properties have the same type
+            let currType = '';
+            let isMap = true;
+            for (const key in value) {
+              const type = typeof value[key];
+              if (currType === '') currType = type;
+              else if (currType !== type) {
+                isMap = false; break;
+              }
+            } 
+    
+            if (isMap) {
+              // Add the map
+              fileContent.push(`  ${key}: Map<string, ${currType}>,`);
+            }
+          } else {
+            // added new type array and its import
+            fileContent.push(`  ${key}: ${keyClassName},`);
+            fileContent.unshift(`import { ${keyClassName} } from './${key}/${key}';`)
+            
+            // Go deeper
+            this.convertR(value, this.getNewPath(path, key), key);
+          }
         } else {
           // create new files
           fileContent.push(`  ${key}: ${type}`);
