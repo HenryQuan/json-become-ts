@@ -12,55 +12,51 @@ class writterTS {
   convertR(object, path, name) {
     // Create a folder if doesn't exist to start conversion
     if (!fs.existsSync(path)) fs.mkdirSync(path);
+
     const className = Utility.upperFirst(name);
     const fileContent = ['', `export interface ${className} {`];
 
-    // Loop through object recursively and create new files and folders
-    if (object.constructor === Array) {
-      // If it is an array, only check if its first child
-      fileContent.push(`  ${name}: ${Utility.upperFirst(name)}[],`);
+    // Check if the root object is atually an array
+    if (Array.isArray(object)) {
+      fileContent.push(`  ${name}: ${className}[],`);
+      // If it is an array, only check if its first child (they are all the same)
       if (object[0]) {
         // Check if it has anything inside, might be an empty array
-        const newPath = path.split('/');
-        newPath.push(name);
-        const finalPath = newPath.join('/');
-
-        this.convertR(object[0], finalPath, name);
+        this.convertR(object[0], this.getNewPath(path, name), name);
       }
     } else {
+      // Only loop through keys if the root is not an array
       for (const key in object) {
-        const type = typeof object[key];
-        console.log(type, key);
+        // Get value and its type
         const value = object[key];
-        if (value.constructor === Array) {
+        const type = typeof value;
+        console.log(key, value, type);
+        const keyClassName = Utility.upperFirst(key);
+
+        if (Array.isArray(value)) {
+          const element = value[0];
+          const elementType = typeof element;
           // If it is an array, only check if its first child
-          if (value[0]) {
-            if (typeof value[0] === 'object') {
-              fileContent.push(`  ${key}: ${Utility.upperFirst(key)}[],`);
-              // Check if it has anything inside, might be an empty array
-              const newPath = path.split('/');
-              newPath.push(key);
-              const finalPath = newPath.join('/');
-      
-              this.convertR(value[0], finalPath, key);
-              fileContent.unshift(`import { ${Utility.upperFirst(key)} } from './${key}/${key}';`)
+          if (element) {
+            // Go deep if it has another object inside
+            if (elementType === 'object') {
+              // added new type array and its import
+              fileContent.push(`  ${key}: ${keyClassName}[],`);
+              fileContent.unshift(`import { ${keyClassName} } from './${key}/${key}';`)
+              // Go deeper
+              this.convertR(element, this.getNewPath(path, key), key);
             } else {
-              // Just write the type
-              fileContent.push(`  ${key}: ${typeof value[0]}[],`);
+              // Just write the type array
+              fileContent.push(`  ${key}: ${elementType}[],`);
             }
           }
         } else if (type === 'object') {
-          const typeName = Utility.upperFirst(key);
-          // add new line
-          fileContent.push(`  ${key}: ${typeName},`);
-          // add import
-          fileContent.unshift(`import { ${typeName} } from './${key}/${typeName}';`)
-    
-          const newPath = path.split('/');
-          newPath.push(key);
-          const finalPath = newPath.join('/');
+          // added new type array and its import
+          fileContent.push(`  ${key}: ${keyClassName},`);
+          fileContent.unshift(`import { ${keyClassName} } from './${key}/${key}';`)
+          
           // Go deeper
-          this.convertR(object[key], finalPath, key);
+          this.convertR(value, this.getNewPath(path, key), key);
         } else {
           // create new files
           fileContent.push(`  ${key}: ${type}`);
@@ -69,7 +65,19 @@ class writterTS {
     }
 
     fileContent.push('}\n');
-    fs.writeFileSync(path + '/' + name + '.ts', fileContent.join('\n'));
+    // Join all lines and write it to a file
+    fs.writeFileSync(`${path}/${className}.ts`, fileContent.join('\n'));
+  }
+
+  /**
+   * Split path and join with new name
+   * @param {string} path current path
+   * @param {string} name className that will be used as a new path
+   */
+  getNewPath(path, name) {
+    const newPath = path.split('/');
+    newPath.push(name);
+    return newPath.join('/');
   }
 }
 
