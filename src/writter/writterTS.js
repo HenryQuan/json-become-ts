@@ -55,10 +55,11 @@ class writterTS {
             }
           }
         } else if (type === 'object') {
+          let isMap = false;
           if (this.useMap) {
             // loop through object and check if all properties have the same type
             let currType = '';
-            let isMap = true;
+            isMap = true;
             for (const key in value) {
               const type = typeof value[key];
               if (currType === '') currType = type;
@@ -67,11 +68,14 @@ class writterTS {
               }
             } 
     
-            if (isMap) {
+            if (currType !== '' && isMap) {
               // Add the map
               fileContent.push(`  ${key}: Map<string, ${currType}>,`);
             }
-          } else {
+          }
+
+          // Only go deeper if it is not a map
+          if (!isMap) {
             // added new type array and its import
             fileContent.push(`  ${key}: ${keyClassName},`);
             fileContent.unshift(`import { ${keyClassName} } from './${key}/${key}';`)
