@@ -64,19 +64,36 @@ class writterTS {
           if (this.useMap) {
             // loop through object and check if all properties have the same type
             let currType = '';
+            let mapValue = null;
             isMap = true;
             for (const key in value) {
+              // Quit immediately if it contains another type
               const type = typeof value[key];
-              if (currType === '') currType = type;
-              else if (currType !== type) {
+              if (currType === '') {
+                currType = type;
+                mapValue = value[key];
+              } else if (currType !== type) {
                 isMap = false;
                 break;
               }
             }
 
-            if (currType !== '' && isMap) {
-              // Add the map
-              fileContent.push(`  ${goodKey}: Map<string, ${currType}>,`);
+            // It is map and make sure there are something inside
+            if (mapValue != null && isMap) {
+              // Do not add anything if it is just an empty object
+              if (currType === 'object') {
+                // added new type array and its import
+                fileContent.push(`  ${goodKey}: Map<string, ${keyClassName}>,`);
+                fileContent.unshift(
+                  `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
+                );
+
+                // Go even deeper
+                this.convertR(mapValue, this.getNewPath(path, goodKey), goodKey);
+              } else {
+                // Just add the map
+                fileContent.push(`  ${goodKey}: Map<string, ${currType}>,`);
+              }
             }
           }
 
