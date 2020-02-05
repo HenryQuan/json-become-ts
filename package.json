@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "babel src -d lib",
-    "test": "node lib/json2ts.js src/example/modules.json --map",
+    "test": "node lib/json-become-ts.js src/example/modules.json --map",
     "clean": "rm -rf array lib object ultimate testMap gameVersion modules",
     "all": "yarn clean && yarn build && yarn test"
   },
