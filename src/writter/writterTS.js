@@ -18,15 +18,17 @@ class writterTS {
     // Create a folder if doesn't exist to start conversion
     if (!fs.existsSync(path)) fs.mkdirSync(path);
 
-    const className = Utility.upperFirst(name);
+    const goodName = Utility.normalise(name);
+    console.log(goodName);
+    const className = Utility.upperFirst(goodName);
     const fileContent = ['', `export interface ${className} {`];
     // Check if the root object is atually an array
     if (Array.isArray(object)) {
-      fileContent.push(`  ${name}: ${className}[],`);
+      fileContent.push(`  ${goodName}: ${className}[],`);
       // If it is an array, only check if its first child (they are all the same)
       if (object[0]) {
         // Check if it has anything inside, might be an empty array
-        this.convertR(object[0], this.getNewPath(path, name), name);
+        this.convertR(object[0], this.getNewPath(path, goodName), goodName);
       }
     } else {
       // Only loop through keys if the root is not an array
@@ -34,8 +36,9 @@ class writterTS {
         // Get value and its type
         const value = object[key];
         const type = typeof value;
-        console.log(key, value, type);
-        const keyClassName = Utility.upperFirst(key);
+        // console.log(key, value, type);
+        const goodKey = Utility.normalise(key);
+        const keyClassName = Utility.upperFirst(goodKey);
 
         if (Array.isArray(value)) {
           const element = value[0];
@@ -45,13 +48,13 @@ class writterTS {
             // Go deep if it has another object inside
             if (elementType === 'object') {
               // added new type array and its import
-              fileContent.push(`  ${key}: ${keyClassName}[],`);
-              fileContent.unshift(`import { ${keyClassName} } from './${key}/${key}';`)
+              fileContent.push(`  ${goodKey}: ${keyClassName}[],`);
+              fileContent.unshift(`import { ${keyClassName} } from './${goodKey}/${goodKey}';`)
               // Go deeper
-              this.convertR(element, this.getNewPath(path, key), key);
+              this.convertR(element, this.getNewPath(path, goodKey), goodKey);
             } else {
               // Just write the type array
-              fileContent.push(`  ${key}: ${elementType}[],`);
+              fileContent.push(`  ${goodKey}: ${elementType}[],`);
             }
           }
         } else if (type === 'object') {
@@ -70,22 +73,22 @@ class writterTS {
     
             if (currType !== '' && isMap) {
               // Add the map
-              fileContent.push(`  ${key}: Map<string, ${currType}>,`);
+              fileContent.push(`  ${goodKey}: Map<string, ${currType}>,`);
             }
           }
 
           // Only go deeper if it is not a map
           if (!isMap) {
             // added new type array and its import
-            fileContent.push(`  ${key}: ${keyClassName},`);
-            fileContent.unshift(`import { ${keyClassName} } from './${key}/${key}';`)
+            fileContent.push(`  ${goodKey}: ${keyClassName},`);
+            fileContent.unshift(`import { ${keyClassName} } from './${goodKey}/${goodKey}';`)
             
             // Go deeper
-            this.convertR(value, this.getNewPath(path, key), key);
+            this.convertR(value, this.getNewPath(path, goodKey), goodKey);
           }
         } else {
           // create new files
-          fileContent.push(`  ${key}: ${type}`);
+          fileContent.push(`  ${goodKey}: ${type}`);
         }
       }
     }

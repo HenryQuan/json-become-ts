@@ -7,6 +7,14 @@ class Utility {
   static upperFirst(name) {
       return name.charAt(0).toUpperCase() + name.slice(1);
   }
+
+  /**
+   * Remove illegal characters
+   * @param {string} name 
+   */
+  static normalise(name) {
+    return name.split(/[^a-zA-Z0-9$]/).join('');
+  }
 }
 
 export { Utility };
