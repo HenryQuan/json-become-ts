@@ -3,7 +3,7 @@ import { Utility } from './utility';
 
 class writterTS {
   constructor(argv) {
-    if (argv[1]) {
+    if (argv[1] === '--map') {
       this.useMap = true;
     }
   }
@@ -19,7 +19,6 @@ class writterTS {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
 
     const goodName = Utility.normalise(name);
-    console.log(goodName);
     const className = Utility.upperFirst(goodName);
     const fileContent = ['', `export interface ${className} {`];
     // Check if the root object is atually an array
@@ -39,6 +38,7 @@ class writterTS {
         // console.log(key, value, type);
         const goodKey = Utility.normalise(key);
         const keyClassName = Utility.upperFirst(goodKey);
+        console.log(goodKey);
 
         if (Array.isArray(value)) {
           const element = value[0];
@@ -49,7 +49,9 @@ class writterTS {
             if (elementType === 'object') {
               // added new type array and its import
               fileContent.push(`  ${goodKey}: ${keyClassName}[],`);
-              fileContent.unshift(`import { ${keyClassName} } from './${goodKey}/${goodKey}';`)
+              fileContent.unshift(
+                `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
+              );
               // Go deeper
               this.convertR(element, this.getNewPath(path, goodKey), goodKey);
             } else {
@@ -67,10 +69,11 @@ class writterTS {
               const type = typeof value[key];
               if (currType === '') currType = type;
               else if (currType !== type) {
-                isMap = false; break;
+                isMap = false;
+                break;
               }
-            } 
-    
+            }
+
             if (currType !== '' && isMap) {
               // Add the map
               fileContent.push(`  ${goodKey}: Map<string, ${currType}>,`);
@@ -81,8 +84,10 @@ class writterTS {
           if (!isMap) {
             // added new type array and its import
             fileContent.push(`  ${goodKey}: ${keyClassName},`);
-            fileContent.unshift(`import { ${keyClassName} } from './${goodKey}/${goodKey}';`)
-            
+            fileContent.unshift(
+              `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
+            );
+
             // Go deeper
             this.convertR(value, this.getNewPath(path, goodKey), goodKey);
           }
