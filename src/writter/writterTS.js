@@ -2,6 +2,7 @@ import fs from 'fs';
 import { Utility } from './utility';
 
 class writterTS {
+
   /**
    * Convert recursively
    * @param {any} object any json object
@@ -69,27 +70,6 @@ class writterTS {
 
     fileContent.push('}\n');
     fs.writeFileSync(path + '/' + name + '.ts', fileContent.join('\n'));
-  }
-
-  /**
-   * Check for array and continue with recursion
-   * @param {any} object any json object
-   * @param {string} path current path
-   * @param {string} name used for class name
-   */
-  checkArray(object, path, name) {
-    if (object.constructor === Array) {
-      // If it is an array, only check if its first child
-      fileContent.push(`  ${name}: ${Utility.upperFirst(name)}[],`);
-      if (object[0]) {
-        // Check if it has anything inside, might be an empty array
-        const newPath = path.split('/');
-        newPath.push(name);
-        const finalPath = newPath.join('/');
-
-        this.convertR(object[0], finalPath, name);
-      }
-    } 
   }
 }
 
