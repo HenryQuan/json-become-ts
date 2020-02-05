@@ -1,11 +1,11 @@
 {
-    "loop": [
+  "loop": [
+    {
+      "one": [
         {
-            "one": [
-                {
-                    "over": true
-                }
-            ]
+          "over": true
         }
-    ]
+      ]
+    }
+  ]
 }
