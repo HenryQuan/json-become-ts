@@ -1,13 +1,9 @@
 import fs from 'fs';
 import { Utility } from './utility';
 
-class writterTS {
-  constructor(argv) {
-    if (argv[1] === '--map') {
-      this.useMap = true;
-    }
-  }
+const mapThreshold = 10;
 
+class writterTS {
   /**
    * Convert recursively
    * @param {any} object any json object
@@ -61,7 +57,8 @@ class writterTS {
           }
         } else if (type === 'object') {
           let isMap = false;
-          if (this.useMap) {
+          // At least 10 objects inside
+          if (Object.keys(value).length > mapThreshold) {
             // loop through object and check if all properties have the same type
             let currType = '';
             let mapValue = null;
