@@ -8,7 +8,8 @@ It is another tool that I need for [WoWs Info](https://github.com/HenryQuan/WoWs
 
 ### Features
 - Support `number`, `string`, `boolean`
-- Support `array` and detect `map`
+- Support `array` and auto detect `map`
+- Remove illegal characters
 
 The next step is to support optional types. It might be possible with the help of [obj-join](https://github.com/HenryQuan/obj-join). After that, I will add the option to generate classes instead of interfaces.
 
