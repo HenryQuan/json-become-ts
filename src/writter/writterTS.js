@@ -34,7 +34,6 @@ class writterTS {
         // console.log(key, value, type);
         const goodKey = Utility.normalise(key);
         const keyClassName = Utility.upperFirst(goodKey);
-        console.log(goodKey);
 
         if (Array.isArray(value)) {
           const element = value[0];
