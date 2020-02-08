@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { Utility } from './utility';
 
-const mapThreshold = 10;
+const mapThreshold = 0;
 
 class writterTS {
   /**
@@ -19,7 +19,7 @@ class writterTS {
     const fileContent = ['', `export interface ${className} {`];
     // Check if the root object is atually an array
     if (Array.isArray(object)) {
-      fileContent.push(`  ${goodName}: ${className}[],`);
+      fileContent.push(`  ${goodName}: ${className}[];`);
       // If it is an array, only check if its first child (they are all the same)
       if (object[0]) {
         // Check if it has anything inside, might be an empty array
@@ -43,7 +43,7 @@ class writterTS {
             // Go deep if it has another object inside
             if (elementType === 'object') {
               // added new type array and its import
-              fileContent.push(`  ${goodKey}: ${keyClassName}[],`);
+              fileContent.push(`  ${goodKey}: ${keyClassName}[];`);
               fileContent.unshift(
                 `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
               );
@@ -51,13 +51,13 @@ class writterTS {
               this.convertR(element, this.getNewPath(path, goodKey), goodKey);
             } else {
               // Just write the type array
-              fileContent.push(`  ${goodKey}: ${elementType}[],`);
+              fileContent.push(`  ${goodKey}: ${elementType}[];`);
             }
           }
         } else if (type === 'object') {
           if (value == null) {
             // Write object if it is null
-            fileContent.push(`  ${goodKey}: object,`);
+            fileContent.push(`  ${goodKey}: object;`);
           } else {
             let isMap = false;
             // At least 10 objects inside
@@ -83,7 +83,7 @@ class writterTS {
                 // Do not add anything if it is just an empty object
                 if (currType === 'object') {
                   // added new type array and its import
-                  fileContent.push(`  ${goodKey}: Map<string, ${keyClassName}>,`);
+                  fileContent.push(`  ${goodKey}: Map<string, ${keyClassName}>;`);
                   fileContent.unshift(
                     `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
                   );
@@ -92,7 +92,7 @@ class writterTS {
                   this.convertR(mapValue, this.getNewPath(path, goodKey), goodKey);
                 } else {
                   // Just add the map
-                  fileContent.push(`  ${goodKey}: Map<string, ${currType}>,`);
+                  fileContent.push(`  ${goodKey}: Map<string, ${currType}>;`);
                 }
               }
             }
@@ -100,7 +100,7 @@ class writterTS {
             // Only go deeper if it is not a map
             if (!isMap) {
               // added new type array and its import
-              fileContent.push(`  ${goodKey}: ${keyClassName},`);
+              fileContent.push(`  ${goodKey}: ${keyClassName};`);
               fileContent.unshift(
                 `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
               );
@@ -111,7 +111,7 @@ class writterTS {
           }
         } else {
           // create new files
-          fileContent.push(`  ${goodKey}: ${type}`);
+          fileContent.push(`  ${goodKey}: ${type};`);
         }
       }
     }
