@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { Utility } from './utility';
 
-const mapThreshold = 0;
+const mapThreshold = 10;
 
 class writterTS {
   /**
