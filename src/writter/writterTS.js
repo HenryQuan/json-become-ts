@@ -55,54 +55,59 @@ class writterTS {
             }
           }
         } else if (type === 'object') {
-          let isMap = false;
-          // At least 10 objects inside
-          if (Object.keys(value).length > mapThreshold) {
-            // loop through object and check if all properties have the same type
-            let currType = '';
-            let mapValue = null;
-            isMap = true;
-            for (const key in value) {
-              // Quit immediately if it contains another type
-              const type = typeof value[key];
-              if (currType === '') {
-                currType = type;
-                mapValue = value[key];
-              } else if (currType !== type) {
-                isMap = false;
-                break;
+          if (value == null) {
+            // Write object if it is null
+            fileContent.push(`  ${goodKey}: object,`);
+          } else {
+            let isMap = false;
+            // At least 10 objects inside
+            if (Object.keys(value).length > mapThreshold) {
+              // loop through object and check if all properties have the same type
+              let currType = '';
+              let mapValue = null;
+              isMap = true;
+              for (const key in value) {
+                // Quit immediately if it contains another type
+                const type = typeof value[key];
+                if (currType === '') {
+                  currType = type;
+                  mapValue = value[key];
+                } else if (currType !== type) {
+                  isMap = false;
+                  break;
+                }
+              }
+  
+              // It is map and make sure there are something inside
+              if (mapValue != null && isMap) {
+                // Do not add anything if it is just an empty object
+                if (currType === 'object') {
+                  // added new type array and its import
+                  fileContent.push(`  ${goodKey}: Map<string, ${keyClassName}>,`);
+                  fileContent.unshift(
+                    `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
+                  );
+  
+                  // Go even deeper
+                  this.convertR(mapValue, this.getNewPath(path, goodKey), goodKey);
+                } else {
+                  // Just add the map
+                  fileContent.push(`  ${goodKey}: Map<string, ${currType}>,`);
+                }
               }
             }
-
-            // It is map and make sure there are something inside
-            if (mapValue != null && isMap) {
-              // Do not add anything if it is just an empty object
-              if (currType === 'object') {
-                // added new type array and its import
-                fileContent.push(`  ${goodKey}: Map<string, ${keyClassName}>,`);
-                fileContent.unshift(
-                  `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
-                );
-
-                // Go even deeper
-                this.convertR(mapValue, this.getNewPath(path, goodKey), goodKey);
-              } else {
-                // Just add the map
-                fileContent.push(`  ${goodKey}: Map<string, ${currType}>,`);
-              }
+  
+            // Only go deeper if it is not a map
+            if (!isMap) {
+              // added new type array and its import
+              fileContent.push(`  ${goodKey}: ${keyClassName},`);
+              fileContent.unshift(
+                `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
+              );
+  
+              // Go deeper
+              this.convertR(value, this.getNewPath(path, goodKey), goodKey);
             }
-          }
-
-          // Only go deeper if it is not a map
-          if (!isMap) {
-            // added new type array and its import
-            fileContent.push(`  ${goodKey}: ${keyClassName},`);
-            fileContent.unshift(
-              `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
-            );
-
-            // Go deeper
-            this.convertR(value, this.getNewPath(path, goodKey), goodKey);
           }
         } else {
           // create new files
