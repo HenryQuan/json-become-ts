@@ -115,8 +115,6 @@ class writter {
     fs.writeFileSync(this.filePath(path, className), fileContent.join('\n'));
   }
 
-  function 
-
   /**
    * Split path and join with new name
    * @param {string} path current path
