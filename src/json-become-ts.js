@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { writterTS } from './writter/writterTS';
+import { writterDart } from './writter/writterDart';
 
 const argv = process.argv.slice(2);
 if (argv.length === 0) {
@@ -11,7 +12,8 @@ if (argv.length === 0) {
   const jsonObject = JSON.parse(file);
   
   const rootName = getJsonFileName(jsonPath);
-  const ts = new writterTS();
+  // const ts = new writterTS();
+  const ts = new writterDart();
   ts.convertR(jsonObject, rootName, rootName);
 }
 
