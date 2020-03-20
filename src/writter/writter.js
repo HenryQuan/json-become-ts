@@ -4,11 +4,6 @@ import { Utility } from './utility';
 const mapThreshold = 10;
 
 class writter {
-
-  constructor() {
-
-  }
-
   /**
    * Convert recursively
    * @param {any} object any json object
@@ -21,10 +16,10 @@ class writter {
 
     const goodName = Utility.normalise(name);
     const className = Utility.upperFirst(goodName);
-    const fileContent = ['', `export interface ${className} {`];
+    const fileContent = this.defaultContent(className);
     // Check if the root object is atually an array
     if (Array.isArray(object)) {
-      fileContent.push(`  ${goodName}: ${className}[];`);
+      fileContent.push(this.arrayEntry(goodName, className));
       // If it is an array, only check if its first child (they are all the same)
       if (object[0]) {
         // Check if it has anything inside, might be an empty array
@@ -48,21 +43,19 @@ class writter {
             // Go deep if it has another object inside
             if (elementType === 'object') {
               // added new type array and its import
-              fileContent.push(`  ${goodKey}: ${keyClassName}[];`);
-              fileContent.unshift(
-                `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
-              );
+              fileContent.push(this.arrayEntry(goodKey, keyClassName));
+              fileContent.unshift(this.importEntry(keyClassName, goodKey));
               // Go deeper
               this.convertR(element, this.getNewPath(path, goodKey), goodKey);
             } else {
               // Just write the type array
-              fileContent.push(`  ${goodKey}: ${elementType}[];`);
+              fileContent.push(this.arrayEntry(goodKey, elementType));
             }
           }
         } else if (type === 'object') {
           if (value == null) {
             // Write object if it is null
-            fileContent.push(`  ${goodKey}: object;`);
+            fileContent.push(this.objectEntry(goodKey));
           } else {
             let isMap = false;
             // At least 10 objects inside
@@ -88,16 +81,14 @@ class writter {
                 // Do not add anything if it is just an empty object
                 if (currType === 'object') {
                   // added new type array and its import
-                  fileContent.push(`  ${goodKey}: Map<string, ${keyClassName}>;`);
-                  fileContent.unshift(
-                    `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
-                  );
+                  fileContent.push(this.mapEntry(goodKey, keyClassName));
+                  fileContent.unshift(this.importEntry(keyClassName, goodKey));
   
                   // Go even deeper
                   this.convertR(mapValue, this.getNewPath(path, goodKey), goodKey);
                 } else {
                   // Just add the map
-                  fileContent.push(`  ${goodKey}: Map<string, ${currType}>;`);
+                  fileContent.push(this.mapEntry(goodKey, currType));
                 }
               }
             }
@@ -105,10 +96,8 @@ class writter {
             // Only go deeper if it is not a map
             if (!isMap) {
               // added new type array and its import
-              fileContent.push(`  ${goodKey}: ${keyClassName};`);
-              fileContent.unshift(
-                `import { ${keyClassName} } from './${goodKey}/${keyClassName}';`
-              );
+              fileContent.push(this.anyEntry(goodKey, keyClassName));
+              fileContent.unshift(this.importEntry(keyClassName, goodKey));
   
               // Go deeper
               this.convertR(value, this.getNewPath(path, goodKey), goodKey);
@@ -116,15 +105,17 @@ class writter {
           }
         } else {
           // create new files
-          fileContent.push(`  ${goodKey}: ${type};`);
+          fileContent.push(this.anyEntry(goodKey, type));
         }
       }
     }
 
     fileContent.push('}\n');
     // Join all lines and write it to a file
-    fs.writeFileSync(`${path}/${className}.ts`, fileContent.join('\n'));
+    fs.writeFileSync(this.filePath(path, className), fileContent.join('\n'));
   }
+
+  function 
 
   /**
    * Split path and join with new name
