@@ -9,7 +9,7 @@ class writterDart extends writter {
   }
 
   arrayEntry(goodName, className) {
-    return `  List<${className}> _${goodName};`;
+    return `  List<${this._convert2Dart(className)}> _${goodName};`;
   }
 
   importEntry(keyClassName, goodKey) {
@@ -21,17 +21,11 @@ class writterDart extends writter {
   }
 
   anyEntry(goodKey, type) {
-    // Dart has different naming
-    var dartType = type;
-    if (type === 'number') dartType = 'int';
-    else if (type == 'boolean') dartType = 'bool';
-    else if (type == 'string') dartType = 'String';
-
-    return `  ${dartType} _${goodKey};`;
+    return `  ${this._convert2Dart(type)} _${goodKey};`;
   }
 
   mapEntry(goodKey, keyClassName) {
-    return `  Map<String, ${keyClassName}> _${goodKey};`;
+    return `  Map<String, ${this._convert2Dart(keyClassName)}> _${goodKey};`;
   }
   
   filePath(path, className) {
@@ -40,6 +34,15 @@ class writterDart extends writter {
 
   _upperFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  _convert2Dart(type) {
+    // Dart has different naming
+    var dartType = type;
+    if (type === 'number') dartType = 'int';
+    else if (type == 'boolean') dartType = 'bool';
+    else if (type == 'string') dartType = 'String';
+    return dartType;
   }
 }
 
