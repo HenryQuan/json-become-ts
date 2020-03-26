@@ -8,3 +8,7 @@ loop/
 object/
 map/
 gameVersion/
+
+# Mac temp files
+._*
+.DS_Store
