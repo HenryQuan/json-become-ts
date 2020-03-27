@@ -1,11 +1,11 @@
 {
-    "name": "GUI",
-    "short_name": "GUI",
+    "name": "JSON: become TS",
+    "short_name": "JSON: become TS",
     "start_url": ".",
     "display": "minimal-ui",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "JSON to TypeScript/Dart converter",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
