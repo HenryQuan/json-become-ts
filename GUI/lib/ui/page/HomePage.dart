@@ -1,6 +1,7 @@
 import 'package:GUI/core/writterDart.dart';
 import 'package:GUI/ui/page/AboutPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// HomePage class
 class HomePage extends StatefulWidget {
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String input;
   String output;
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: TextFormField(
+                        controller: controller,
                         expands: true,
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
@@ -68,7 +71,10 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.content_paste),
                     label: Text('Paste'),
                     onPressed: () {
-                      WritterDart(this.input);
+                      // Paste text into input
+                      Clipboard.getData(Clipboard.kTextPlain).then((value) {
+                        controller.text = value.text;
+                      });
                     },
                   ),
                 ),
