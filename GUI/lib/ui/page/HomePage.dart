@@ -8,7 +8,6 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
@@ -16,30 +15,56 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('JSON: become TS')
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Row(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      child: TextFormField(
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'JSON',
+                        ),
+                        autocorrect: false,
+                        autofocus: false,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.all(8),
+                      children: <Widget>[
+                        Text('Output')
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
               children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: Container(color: Colors.red),
+                Expanded(
+                  child: FlatButton(
+                    child: Text('Convert'),
+                    onPressed: () {},
+                  ),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: Container(color: Colors.green),
+                Expanded(
+                  child: FlatButton(
+                    child: Text('Copy output'),
+                    onPressed: () {},
+                  ),
                 ),
               ],
-            ),
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: RaisedButton(
-              child: Text('Convert'),
-              onPressed: () {},
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
