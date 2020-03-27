@@ -14,5 +14,8 @@ abstract class Writter {
       print('JSON is not valid');
     }
   }
+
+  /// Convert dart types to other types
+  String typeConverter(String type); 
 }
 
