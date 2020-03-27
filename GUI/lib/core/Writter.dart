@@ -11,7 +11,7 @@ abstract class Writter {
     // Decode it into a map
     try {
       json = jsonDecode(jsonString);
-      if (json != null) _convert(json);
+      if (json != null && _isObjectOrArray(json)) _convert(json);
     } catch (e) {
       // JSON is not valid
       print('JSON is not valid');
@@ -20,7 +20,7 @@ abstract class Writter {
 
   /// Merge all files into one
   String toString() {
-    if (json == null) return 'null';
+    if (json == null || !_isObjectOrArray(json)) return 'null';
     // Map each list into files and join files into the final output
     return _classes.map((c) => c.join('\n')).join('\n\n');
   }
@@ -28,6 +28,12 @@ abstract class Writter {
   /// Convert json into any language
   _convert(dynamic object) {
     if (object == null) return;
+  }
+
+  /// We only need to go deeper if it is an object or array. 
+  /// In Dart, it is `Map` or `List` 
+  _isObjectOrArray(dynamic anything) {
+    return anything.runtimeType == Map || anything.runtimeType == List;
   }
 
   /// Convert dart types to other types
