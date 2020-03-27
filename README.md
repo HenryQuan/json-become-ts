@@ -19,3 +19,6 @@ The next step is to support optional types. It might be possible with the help o
 ## Example
 - Check the [example](https://github.com/HenryQuan/json-become-ts/tree/master/src/example) folder to see what it does
 - Check the [modules](https://github.com/HenryQuan/json-become-ts/tree/master/src/example/modules) folder for dart
+
+### Special thanks
+Checkout [this website](https://next.json-generator.com/) for generating random json.
