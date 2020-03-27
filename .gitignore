@@ -1,6 +1,7 @@
 **/.vscode
 **/node_modules
 lib/
+!GUI/lib
 object/
 array/
 ultimate/
