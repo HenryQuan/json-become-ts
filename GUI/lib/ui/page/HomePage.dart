@@ -16,7 +16,31 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('JSON: become TS')
       ),
-      body: Container(),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: Container(color: Colors.red),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Container(color: Colors.green),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: RaisedButton(
+              child: Text('Convert'),
+              onPressed: () {},
+            ),
+          )
+        ],
+      ),
     );
   }
 }
