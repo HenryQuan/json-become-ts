@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                     child: ListView(
                       padding: EdgeInsets.all(8),
                       children: <Widget>[
-                        SelectableText('Output')
+                        SelectableText(output ?? 'Output')
                       ],
                     ),
                   ),
@@ -83,7 +83,9 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.compare_arrows),
                     label: Text('Convert'),
                     onPressed: () {
-                      WritterDart(this.input);
+                      setState(() {
+                        this.output = WritterDart(this.input).toString();
+                      });
                     },
                   ),
                 ),
@@ -91,7 +93,12 @@ class _HomePageState extends State<HomePage> {
                   child: FlatButton.icon(
                     icon: Icon(Icons.content_copy),
                     label: Text('Copy'),
-                    onPressed: () {},
+                    onPressed: () {
+                      // I think it will crash if you copy `null`
+                      if (this.output != null) {
+                        Clipboard.setData(ClipboardData(text: this.output));
+                      }
+                    },
                   ),
                 ),
               ],

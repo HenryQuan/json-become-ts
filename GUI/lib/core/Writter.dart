@@ -11,7 +11,7 @@ abstract class Writter {
     // Decode it into a map
     try {
       json = jsonDecode(jsonString);
-      _convert(json);
+      if (json != null) _convert(json);
     } catch (e) {
       // JSON is not valid
       print('JSON is not valid');
@@ -20,6 +20,7 @@ abstract class Writter {
 
   /// Merge all files into one
   String toString() {
+    if (json == null) return 'null';
     // Map each list into files and join files into the final output
     return _classes.map((c) => c.join('\n')).join('\n\n');
   }
