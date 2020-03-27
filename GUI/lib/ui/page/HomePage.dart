@@ -1,3 +1,4 @@
+import 'package:GUI/core/writterDart.dart';
 import 'package:flutter/material.dart';
 
 /// HomePage class
@@ -9,6 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String input;
+  String output;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +37,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         autocorrect: false,
                         autofocus: false,
+                        onChanged: (t) => this.input = t,
                       ),
                     ),
                   ),
@@ -52,7 +57,9 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: FlatButton(
                     child: Text('Convert'),
-                    onPressed: () {},
+                    onPressed: () {
+                      WritterDart(this.input);
+                    },
                   ),
                 ),
                 Expanded(
