@@ -1,3 +1,6 @@
+import 'ModelEntry.dart';
+import 'ModelClass.dart';
+
 import 'StringExtension.dart';
 import 'dart:convert';
 import 'dart:math';
@@ -9,7 +12,7 @@ abstract class Writter {
   /// It can either be a `list` or a `map` or null
   dynamic json;
   /// There are different classes all in one place
-  Map<String, List<String>> _classes = Map();
+  Map<String, ModelClass> _classes = Map();
 
   // These two handles error
   String _errorMessage;
@@ -21,7 +24,7 @@ abstract class Writter {
     try {
       json = jsonDecode(jsonString);
       if (isValid() && _isObjectOrArray(json)) {
-        _convert(json, jsonName, null);
+        _convert(json, jsonName);
       }
     } catch (e) {
       // JSON is not valid but the reason is unknown
@@ -70,27 +73,24 @@ abstract class Writter {
   String toString() {
     if (!isValid() || !_isObjectOrArray(json)) return 'null';
     // Join all lists first in the map and join again in the list
-    return _classes.keys.map((e) => _classes[e].join('\n')).toList().join('\n\n');
+    return _classes.keys.map((e) => _classes[e]).toList().join('\n\n');
   }
 
   /// Convert json into any language
-  _convert(dynamic object, String className, String key) {
-    if (object == null) return;
-
+  _convert(dynamic object, String className) {
     if (object is Map) {
       // This is an object, the key must be a string
       final map = object as Map<String, dynamic>;
       // Loop through this map
       map.keys.forEach((k) {
         final element = map[k];
+        _addToMap(className, ModelEntry(k, element));
         if (element is Map) {
-          print('${k.normaliseType()} $k');
-          _convert(element, k.normaliseType(), null);
+          // Another object so we need to loop through it again
+          _convert(element, k.normaliseType());
         } else if (element is List) {
-          print('List<${k.normaliseType()}> $k');
-          _convert(element, className, k);
-        } else {
-          print('${element.runtimeType.toString()} $k');
+          // You need to mark this as list
+          _convert(element, className);
         }
       });
     } else if (object is List) {
@@ -101,9 +101,17 @@ abstract class Writter {
         // -1 to get the index
         int index = random.nextInt(object.length - 1);
         print('Lucky index is $index');
-        _convert(object[index], className, key);
+        _convert(object[index], className);
       }
     }
+  }
+
+  /// This does a check if the key is already used
+  _addToMap(String key, ModelEntry entry) {
+    final value = this._classes[key];
+    // Init if value is null
+    if (value == null) this._classes[key] = ModelClass()..addEntry(entry);
+    else value.addEntry(entry);
   }
 
   /// We only need to go deeper if it is an object or array. 

@@ -1,10 +1,11 @@
-/// It stores 
-abstract class ModelEntry {
-  String _key;
-  dynamic _value;
+/// It stores the key and its value type
+class ModelEntry {
+  String key;
+  Type type;
 
-  ModelEntry(this._key, this._value);
+  ModelEntry(this.key, dynamic value) {
+    this.type = value.runtimeType;
+  }
 
-  /// 
-  String write();
+  String getType() => type.toString();
 }
