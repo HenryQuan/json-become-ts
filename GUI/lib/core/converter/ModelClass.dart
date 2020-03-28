@@ -4,8 +4,12 @@ import 'ModelEntry.dart';
 /// - entry with type
 /// - more helper functions
 class ModelClass {
-  List<ModelEntry> entries;
-  addEntry(ModelEntry entry) => entries.add(entry);
+  List<ModelEntry> entries = [];
+  void addEntry(ModelEntry entry) => entries.add(entry);
+
+  ModelClass(ModelEntry entry) {
+    addEntry(entry);
+  }
 
   @override
   String toString() {

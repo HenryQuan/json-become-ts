@@ -12,7 +12,7 @@ abstract class Writter {
   /// It can either be a `list` or a `map` or null
   dynamic json;
   /// There are different classes all in one place
-  Map<String, ModelClass> _classes = Map();
+  final Map<String, ModelClass> _classes = {};
 
   // These two handles error
   String _errorMessage;
@@ -110,7 +110,7 @@ abstract class Writter {
   _addToMap(String key, ModelEntry entry) {
     final value = this._classes[key];
     // Init if value is null
-    if (value == null) this._classes[key] = ModelClass()..addEntry(entry);
+    if (value == null) this._classes[key] = ModelClass(entry);
     else value.addEntry(entry);
   }
 
