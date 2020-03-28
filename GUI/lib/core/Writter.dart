@@ -7,7 +7,7 @@ abstract class Writter {
   /// It can either be a `list` or a `map` or null
   dynamic json;
   /// There are different files all in one place
-  List<List<String>> _classes = [[]];
+  List<String> _classes = [];
 
   Writter(String jsonString, String jsonName) {
     // Decode it into a map
@@ -29,7 +29,8 @@ abstract class Writter {
   String toString() {
     if (!isValid() || !_isObjectOrArray(json)) return 'null';
     // Map each list into files and join files into the final output
-    return _classes.map((c) => c.join('\n')).join('\n\n');
+    // return _classes.map((c) => c.join('\n')).join('\n\n');
+    return _classes.join('\n');
   }
 
   /// Convert json into any language
@@ -53,7 +54,7 @@ abstract class Writter {
       }
     } else {
       // This is a normal type
-      print('${object.toString()} ${object.runtimeType.toString()} | class is $className');
+      this._classes.add(newEntry(className, object.runtimeType.toString()));
     }
   }
 

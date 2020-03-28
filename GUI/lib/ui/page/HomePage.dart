@@ -63,7 +63,10 @@ class _HomePageState extends State<HomePage> {
                   child: ListView(
                     padding: EdgeInsets.all(8),
                     children: <Widget>[
-                      SelectableText(output ?? 'Output')
+                      SelectableText(
+                        output ?? 'Output',
+                        style: TextStyle(fontSize: 16),
+                      )
                     ],
                   ),
                 ),

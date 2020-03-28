@@ -13,6 +13,7 @@ extension StringExtension on String {
   /// Remove illegal characters
   String normalise() {
     final temp = this.split(r'[^a-zA-Z0-9$]');
-    return temp.first.lowerFirst() + temp.map((s) => s.upperFirst()).join('');
+    final first = temp.removeAt(0);
+    return first.lowerFirst() + temp.map((s) => s.upperFirst()).join('');
   }
 }
