@@ -16,6 +16,8 @@ class _HomePageState extends State<HomePage> {
   String output;
   String jsonName;
   final controller = TextEditingController();
+  // This is for indicating the text field of name input
+  final nameKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,38 +40,51 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            decoration: InputDecoration.collapsed(
-                              hintText: 'give it a name',
-                            ),
-                            autocorrect: false,
-                            autofocus: false,
-                            onChanged: (t) => this.jsonName = t,
-                          ),
-                        ),
-                        Divider(height: 0),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(8),
-                            child: TextFormField(
-                              controller: controller,
-                              expands: true,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              decoration: InputDecoration.collapsed(
-                                hintText: 'JSON',
+                    child: Form(
+                      key: nameKey,
+                      child: Column(
+                        children: <Widget>[
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) return '*name is necessary';
+                                  return null;
+                                },
+                                decoration: InputDecoration.collapsed(
+                                  hintText: 'Name',
+                                ),
+                                autocorrect: false,
+                                autofocus: false,
+                                onChanged: (t) => this.jsonName = t,
                               ),
-                              autocorrect: false,
-                              autofocus: false,
-                              onChanged: (t) => this.input = t,
                             ),
                           ),
-                        ),
-                      ],
+                          Divider(height: 0),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.all(8),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) return '*this field must not be empty';
+                                  return null;
+                                },
+                                controller: controller,
+                                expands: true,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                decoration: InputDecoration.collapsed(
+                                  hintText: 'JSON',
+                                ),
+                                autocorrect: false,
+                                autofocus: false,
+                                onChanged: (t) => this.input = t,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   VerticalDivider(width: 0),
@@ -104,9 +119,11 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.compare_arrows),
                     label: Text('Convert'),
                     onPressed: () {
-                      setState(() {
-                        this.output = WritterDart(this.input, this.jsonName).toString();
-                      });
+                      if (nameKey.currentState.validate()) {
+                        setState(() {
+                          this.output = WritterDart(this.input, this.jsonName).toString();
+                        });
+                      }
                     },
                   ),
                 ),
