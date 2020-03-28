@@ -115,10 +115,20 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.content_copy),
             label: Text('Copy'),
             onPressed: () {
+              String text = "Nothing was copied...";
               // I think it will crash if you copy `null`
               if (this.output != null) {
                 Clipboard.setData(ClipboardData(text: this.output));
+                text = "Output has been copied :)";
               }
+              
+              // Show a snack bar
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  duration: Duration(seconds: 1),
+                  content: Text(text),
+                ),
+              );
             },
           ),
         ),
