@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// The main body of `HomePage`
   SafeArea buildBody(BuildContext context) {
     return SafeArea(
       child: Column(
@@ -113,6 +114,8 @@ class _HomePageState extends State<HomePage> {
                       this.output = writter.toString();
                     });
                   } else {
+                    // Select the line that has an error
+                    controller.selection = writter.errorSelection(input);
                     // Show a snack bar
                     Scaffold.of(context).showSnackBar(
                       SnackBar(

@@ -2,13 +2,19 @@ import 'dart:convert';
 
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 /// The base of all writter
 abstract class Writter {
   /// It can either be a `list` or a `map` or null
   dynamic json;
   /// There are different classes all in one place
   Map<String, List<String>> _classes = Map();
-  String errorMessage;
+
+  // These two handles error
+  String _errorMessage;
+  String get errorMessage => _errorMessage;
+  String _errorLine;
 
   Writter(String jsonString, String jsonName) {
     // Decode it into a map
@@ -19,9 +25,23 @@ abstract class Writter {
       }
     } catch (e) {
       // JSON is not valid but the reason is unknown
-      this.errorMessage = e.toString().split(':').removeLast().trim();
+      this._errorMessage = e.toString().split(':').removeLast().trim();
+      this._errorLine = _errorMessage.split('\n')[1];
       print('JSON is not valid');
     }
+  }
+
+  /// This return a `TextSelection` that selects the line which has an error
+  TextSelection errorSelection(String input) {
+    // Calculate offset here
+    final offsetStart = input.indexOf(this._errorLine);
+    final offsetEnd = offsetStart + this._errorLine.length;
+
+    // Select the line of error
+    return TextSelection(
+      baseOffset: offsetStart,
+      extentOffset: offsetEnd,
+    );
   }
 
   /// Check whether json is valid
