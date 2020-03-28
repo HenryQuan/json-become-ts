@@ -12,16 +12,16 @@ class WritterDart extends Writter {
 
   @override
   String newEntry(String key, String type) {
-    return '   ${typeConverter(type)} ${key.normalise()};';
+    return '   ${typeConverter(type)} ${key.normaliseVariable()};';
   }
 
   @override
   String newListEntry(String key, String type) {
-    return '   List<${typeConverter(type)}> ${key.normalise()};';
+    return '   List<${typeConverter(type)}> ${key.normaliseVariable()};';
   }
 
   @override
   String newMapEntry(String key, String type) {
-    return '   Map<String, ${typeConverter(type)}> ${key.normalise()};';
+    return '   Map<String, ${typeConverter(type)}> ${key.normaliseVariable()};';
   }
 }

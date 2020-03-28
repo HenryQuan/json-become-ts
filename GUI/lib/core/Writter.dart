@@ -1,5 +1,5 @@
+import 'StringExtension.dart';
 import 'dart:convert';
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ abstract class Writter {
     try {
       json = jsonDecode(jsonString);
       if (isValid() && _isObjectOrArray(json)) {
-        _convert(json, jsonName);
+        _convert(json, jsonName, null);
       }
     } catch (e) {
       // JSON is not valid but the reason is unknown
@@ -74,14 +74,25 @@ abstract class Writter {
   }
 
   /// Convert json into any language
-  _convert(dynamic object, String className) {
+  _convert(dynamic object, String className, String key) {
     if (object == null) return;
 
     if (object is Map) {
       // This is an object, the key must be a string
       final map = object as Map<String, dynamic>;
       // Loop through this map
-      map.keys.forEach((element) => _convert(map[element], element));
+      map.keys.forEach((k) {
+        final element = map[k];
+        if (element is Map) {
+          print('${k.normaliseType()} $k');
+          _convert(element, k.normaliseType(), null);
+        } else if (element is List) {
+          print('List<${k.normaliseType()}> $k');
+          _convert(element, className, k);
+        } else {
+          print('${element.runtimeType.toString()} $k');
+        }
+      });
     } else if (object is List) {
       // This is an array
       if (object.length > 0) {
@@ -90,10 +101,8 @@ abstract class Writter {
         // -1 to get the index
         int index = random.nextInt(object.length - 1);
         print('Lucky index is $index');
-        _convert(object[index], className);
+        _convert(object[index], className, key);
       }
-    } else {
-      // This is a normal type
     }
   }
 

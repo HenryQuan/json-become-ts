@@ -31,16 +31,16 @@ class WritterTS extends Writter {
 
   @override
   String newEntry(String key, String type) {
-    return '   ${key.normalise()}: ${typeConverter(type)}';
+    return '   ${key.normaliseVariable()}: ${typeConverter(type)}';
   }
 
   @override
   String newListEntry(String key, String type) {
-    return '   ${key.normalise()}: ${typeConverter(type)}[]';
+    return '   ${key.normaliseVariable()}: ${typeConverter(type)}[]';
   }
 
   @override
   String newMapEntry(String key, String type) {
-    return '   ${key.normalise()}: Map<string, ${typeConverter(type)}>';
+    return '   ${key.normaliseVariable()}: Map<string, ${typeConverter(type)}>';
   }
 }

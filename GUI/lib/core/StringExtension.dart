@@ -11,9 +11,26 @@ extension StringExtension on String {
   }
 
   /// Remove illegal characters
-  String normalise() {
-    final temp = this.split(r'[^a-zA-Z0-9$]');
-    final first = temp.removeAt(0);
-    return first.lowerFirst() + temp.map((s) => s.upperFirst()).join('');
+  String normaliseType() {
+    final temp = this.split(RegExp(r"[^a-zA-Z0-9]"));
+    String type = temp.map((s) => s.upperFirst()).join('');
+    // Make sure it doesn't end with `s` or 'es'
+    if (type.endsWith('s')) type = type.substring(0, type.length - 1);
+    else if (type.endsWith('es')) type = type.substring(0, type.length - 2);
+    // Add something if the type starts with a number, 123 -> J123
+    if (type[0].isNumeric()) type = 'J' + type;
+    return type;
+  }
+
+  /// Add a letter if the variable starts when numbers
+  String normaliseVariable() {
+    if (this[0].isNumeric()) return 'J' + this;
+    return this;
+  }
+
+  /// Check if a string is numeric
+  bool isNumeric() {
+    if (this == null) return false;
+    return double.tryParse(this) != null;
   }
 }
