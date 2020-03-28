@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 
 import 'dart:math';
@@ -50,7 +49,7 @@ abstract class Writter {
       }
     } else {
       // This is a normal type
-      print(object.runtimeType.toString());
+      print('${object.toString()} ${object.runtimeType.toString()}');
     }
   }
 
