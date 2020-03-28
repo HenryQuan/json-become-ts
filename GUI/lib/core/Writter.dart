@@ -6,8 +6,9 @@ import 'dart:math';
 abstract class Writter {
   /// It can either be a `list` or a `map` or null
   dynamic json;
-  /// There are different files all in one place
-  List<String> _classes = [];
+  /// There are different classes all in one place
+  Map<String, List<String>> _classes = Map();
+  String errorMessage;
 
   Writter(String jsonString, String jsonName) {
     // Decode it into a map
@@ -17,7 +18,8 @@ abstract class Writter {
         _convert(json, jsonName);
       }
     } catch (e) {
-      // JSON is not valid
+      // JSON is not valid but the reason is unknown
+      this.errorMessage = e.toString().split(':').removeLast().trim();
       print('JSON is not valid');
     }
   }
@@ -28,9 +30,8 @@ abstract class Writter {
   /// Merge all files into one
   String toString() {
     if (!isValid() || !_isObjectOrArray(json)) return 'null';
-    // Map each list into files and join files into the final output
-    // return _classes.map((c) => c.join('\n')).join('\n\n');
-    return _classes.join('\n');
+    // Join all lists first in the map and join again in the list
+    return _classes.keys.map((e) => _classes[e].join('\n')).toList().join('\n\n');
   }
 
   /// Convert json into any language
@@ -54,7 +55,6 @@ abstract class Writter {
       }
     } else {
       // This is a normal type
-      this._classes.add(newEntry(className, object.runtimeType.toString()));
     }
   }
 

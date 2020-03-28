@@ -116,8 +116,7 @@ class _HomePageState extends State<HomePage> {
                     // Show a snack bar
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
-                        duration: Duration(seconds: 1),
-                        content: Text("JSON is not valid :("),
+                        content: Text(writter.errorMessage),
                       ),
                     );
                   }
