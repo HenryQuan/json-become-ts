@@ -73,7 +73,7 @@ abstract class Writter {
   String toString() {
     if (!isValid() || !_isObjectOrArray(json)) return 'null';
     // Join all lists first in the map and join again in the list
-    return _classes.keys.map((e) => _classes[e]).toList().join('\n\n');
+    return _classes.keys.map((e) => e + '\n' + _classes[e].toString()).toList().join('\n\n');
   }
 
   /// Convert json into any language
@@ -89,8 +89,15 @@ abstract class Writter {
           // Another object so we need to loop through it again
           _convert(element, k.normaliseType());
         } else if (element is List) {
-          // You need to mark this as list
-          _convert(element, className);
+          // Check if it has plain type
+          if (_isObjectOrArray(element[0])) {
+            // We need another class if it is either map or list
+            _convert(element, k.normaliseType());
+          } else {
+            // Not needed
+            _convert(element, className);
+          }
+        } else {
         }
       });
     } else if (object is List) {
@@ -116,7 +123,8 @@ abstract class Writter {
 
   /// We only need to go deeper if it is an object or array. 
   /// In Dart, it is `Map` or `List` 
-  _isObjectOrArray(dynamic anything) {
+  bool _isObjectOrArray(dynamic anything) {
+    if (anything == null) return false;
     final valid = anything is Map || anything is List;
     print(valid);
     return valid;
