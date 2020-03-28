@@ -8,4 +8,10 @@ class WritterTS extends Writter {
     // TODO: implement typeConverter
     throw UnimplementedError();
   }
+
+  @override
+  String newEntry(String key, String type) {
+    // TODO: implement newEntry
+    throw UnimplementedError();
+  }
 }

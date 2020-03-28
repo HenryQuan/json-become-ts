@@ -8,4 +8,10 @@ class WritterDart extends Writter {
     // Dart has the same type name
     return type;
   }
+
+  @override
+  String newEntry(String key, String type) {
+    // TODO: implement newEntry
+    throw UnimplementedError();
+  }
 }
