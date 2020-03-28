@@ -26,16 +26,34 @@ abstract class Writter {
     } catch (e) {
       // JSON is not valid but the reason is unknown
       this._errorMessage = e.toString().split(':').removeLast().trim();
-      this._errorLine = _errorMessage.split('\n')[1];
+      // On web, it has different error code
+      final temp = _errorMessage.split('\n');
+      if (temp.length > 2) this._errorLine = temp[1];
       print('JSON is not valid');
     }
   }
 
   /// This return a `TextSelection` that selects the line which has an error
   TextSelection errorSelection(String input) {
+    int offsetStart;
+    int offsetEnd;
+    String error = _errorLine;
+
+    if (_errorLine == null) {
+      // We only have posistion
+      int position = int.tryParse(this._errorMessage.split(' ').last.trim());
+      print('Position is $position');
+      if (position != null) {
+        error = input.split('\n')[position - 1];
+      } else {
+        // Don't show selection
+        return null;
+      }
+    }
+
     // Calculate offset here
-    final offsetStart = input.indexOf(this._errorLine);
-    final offsetEnd = offsetStart + this._errorLine.length;
+    offsetStart = input.indexOf(error);
+    offsetEnd = offsetStart + error.length;
 
     // Select the line of error
     return TextSelection(

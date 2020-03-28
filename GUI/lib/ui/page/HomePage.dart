@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                     });
                   } else {
                     // Select the line that has an error
-                    controller.selection = writter.errorSelection(input);
+                    controller.selection = writter.errorSelection(input) ?? TextSelection;
                     // Show a snack bar
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
