@@ -52,6 +52,7 @@ abstract class Writter {
     }
 
     // Calculate offset here
+    // TODO: this won't work if there are multiple line with same content
     offsetStart = input.indexOf(error);
     offsetEnd = offsetStart + error.length;
 
