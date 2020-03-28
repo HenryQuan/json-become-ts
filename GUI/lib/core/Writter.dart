@@ -9,12 +9,12 @@ abstract class Writter {
   /// There are different files all in one place
   List<List<String>> _classes = [[]];
 
-  Writter(String jsonString) {
+  Writter(String jsonString, String jsonName) {
     // Decode it into a map
     try {
       json = jsonDecode(jsonString);
       if (json != null && _isObjectOrArray(json)) {
-        _convert(json);
+        _convert(json, jsonName);
       }
     } catch (e) {
       // JSON is not valid
@@ -30,14 +30,14 @@ abstract class Writter {
   }
 
   /// Convert json into any language
-  _convert(dynamic object) {
+  _convert(dynamic object, String className) {
     if (object == null) return;
 
     if (object is Map) {
       // This is an object, the key must be a string
       final map = object as Map<String, dynamic>;
       // Loop through this map
-      map.keys.forEach((element) => _convert(map[element]));
+      map.keys.forEach((element) => _convert(map[element], className));
     } else if (object is List) {
       // This is an array
       if (object.length > 0) {
@@ -45,7 +45,8 @@ abstract class Writter {
         final random = Random();
         // -1 to get the index
         int index = random.nextInt(object.length - 1);
-        _convert(object[index]);
+        print('Lucky index is $index');
+        _convert(object[index], className);
       }
     } else {
       // This is a normal type

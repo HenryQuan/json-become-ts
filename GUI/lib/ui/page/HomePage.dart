@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String input;
   String output;
+  String jsonName;
   final controller = TextEditingController();
 
   @override
@@ -37,22 +38,41 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Container(
-                      margin: EdgeInsets.all(8),
-                      child: TextFormField(
-                        controller: controller,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'JSON',
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            decoration: InputDecoration.collapsed(
+                              hintText: 'give it a name',
+                            ),
+                            autocorrect: false,
+                            autofocus: false,
+                            onChanged: (t) => this.jsonName = t,
+                          ),
                         ),
-                        autocorrect: false,
-                        autofocus: false,
-                        onChanged: (t) => this.input = t,
-                      ),
+                        Divider(height: 0),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.all(8),
+                            child: TextFormField(
+                              controller: controller,
+                              expands: true,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              decoration: InputDecoration.collapsed(
+                                hintText: 'JSON',
+                              ),
+                              autocorrect: false,
+                              autofocus: false,
+                              onChanged: (t) => this.input = t,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  VerticalDivider(width: 0),
                   Expanded(
                     child: ListView(
                       padding: EdgeInsets.all(8),
@@ -64,6 +84,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            Divider(height: 0),
             Row(
               children: <Widget>[
                 Expanded(
@@ -84,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                     label: Text('Convert'),
                     onPressed: () {
                       setState(() {
-                        this.output = WritterDart(this.input).toString();
+                        this.output = WritterDart(this.input, this.jsonName).toString();
                       });
                     },
                   ),
