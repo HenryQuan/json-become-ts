@@ -1,4 +1,4 @@
-import 'package:GUI/core/ModelEntry.dart';
+import 'ModelEntry.dart';
 
 /// It stores a class converted from JSON
 /// - entry with type

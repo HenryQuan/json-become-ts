@@ -1,4 +1,4 @@
-import 'package:GUI/core/writterDart.dart';
+import 'package:GUI/core/converter/writterDart.dart';
 import 'package:GUI/ui/page/AboutPage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
