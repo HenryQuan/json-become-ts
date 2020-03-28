@@ -13,7 +13,7 @@ abstract class Writter {
     // Decode it into a map
     try {
       json = jsonDecode(jsonString);
-      if (json != null && _isObjectOrArray(json)) {
+      if (isValid() && _isObjectOrArray(json)) {
         _convert(json, jsonName);
       }
     } catch (e) {
@@ -22,9 +22,12 @@ abstract class Writter {
     }
   }
 
+  /// Check whether json is valid
+  bool isValid() => json != null;
+
   /// Merge all files into one
   String toString() {
-    if (json == null || !_isObjectOrArray(json)) return 'null';
+    if (!isValid() || !_isObjectOrArray(json)) return 'null';
     // Map each list into files and join files into the final output
     return _classes.map((c) => c.join('\n')).join('\n\n');
   }

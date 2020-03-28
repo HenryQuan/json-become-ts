@@ -33,116 +33,145 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Form(
-                      key: nameKey,
-                      child: Column(
-                        children: <Widget>[
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value.isEmpty) return '*name is necessary';
-                                  return null;
-                                },
-                                decoration: InputDecoration.collapsed(
-                                  hintText: 'Name',
-                                ),
-                                autocorrect: false,
-                                autofocus: false,
-                                onChanged: (t) => this.jsonName = t,
-                              ),
-                            ),
-                          ),
-                          Divider(height: 0),
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.all(8),
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value.isEmpty) return '*this field must not be empty';
-                                  return null;
-                                },
-                                controller: controller,
-                                expands: true,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration.collapsed(
-                                  hintText: 'JSON',
-                                ),
-                                autocorrect: false,
-                                autofocus: false,
-                                onChanged: (t) => this.input = t,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  VerticalDivider(width: 0),
-                  Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.all(8),
-                      children: <Widget>[
-                        SelectableText(output ?? 'Output')
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(height: 0),
-            Row(
+      // Builder is used to show snack bar
+      body: buildBody(context),
+      bottomNavigationBar: Builder(builder: (c) {
+        return BottomAppBar(
+          child: buildBottomButtons(c),
+        );
+      }),
+    );
+  }
+
+  SafeArea buildBody(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Row(
               children: <Widget>[
                 Expanded(
-                  child: FlatButton.icon(
-                    icon: Icon(Icons.content_paste),
-                    label: Text('Paste'),
-                    onPressed: () {
-                      // Paste text into input
-                      Clipboard.getData(Clipboard.kTextPlain).then((value) {
-                        controller.text = value.text;
-                      });
-                    },
-                  ),
+                  child: buildLeftForm(),
                 ),
+                VerticalDivider(width: 0),
                 Expanded(
-                  child: FlatButton.icon(
-                    icon: Icon(Icons.compare_arrows),
-                    label: Text('Convert'),
-                    onPressed: () {
-                      if (nameKey.currentState.validate()) {
-                        setState(() {
-                          this.output = WritterDart(this.input, this.jsonName).toString();
-                        });
-                      }
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: FlatButton.icon(
-                    icon: Icon(Icons.content_copy),
-                    label: Text('Copy'),
-                    onPressed: () {
-                      // I think it will crash if you copy `null`
-                      if (this.output != null) {
-                        Clipboard.setData(ClipboardData(text: this.output));
-                      }
-                    },
+                  child: ListView(
+                    padding: EdgeInsets.all(8),
+                    children: <Widget>[
+                      SelectableText(output ?? 'Output')
+                    ],
                   ),
                 ),
               ],
-            )
-          ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// This `Row` contains three `FlatButton` with `icons`
+  Row buildBottomButtons(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: FlatButton.icon(
+            icon: Icon(Icons.content_paste),
+            label: Text('Paste'),
+            onPressed: () {
+              // Paste text into input
+              Clipboard.getData(Clipboard.kTextPlain).then((value) {
+                controller.text = value.text;
+              });
+            },
+          ),
         ),
+        Expanded(
+          child: FlatButton.icon(
+            icon: Icon(Icons.compare_arrows),
+            label: Text('Convert'),
+            onPressed: () {
+              if (nameKey.currentState.validate()) {
+                final writter = WritterDart(this.input, this.jsonName);
+                if (writter.isValid()) {
+                  setState(() {
+                    this.output = writter.toString();
+                  });
+                } else {
+                  // Show a snack bar
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 1),
+                      content: Text("JSON is not valid :("),
+                    ),
+                  );
+                }
+              }
+            },
+          ),
+        ),
+        Expanded(
+          child: FlatButton.icon(
+            icon: Icon(Icons.content_copy),
+            label: Text('Copy'),
+            onPressed: () {
+              // I think it will crash if you copy `null`
+              if (this.output != null) {
+                Clipboard.setData(ClipboardData(text: this.output));
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// This `Form` contains two `TextFormField` for validation
+  Form buildLeftForm() {
+    return Form(
+      key: nameKey,
+      child: Column(
+        children: <Widget>[
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) return '*name is necessary';
+                  return null;
+                },
+                decoration: InputDecoration.collapsed(
+                  hintText: 'Name',
+                ),
+                autocorrect: false,
+                autofocus: false,
+                onChanged: (t) => this.jsonName = t,
+              ),
+            ),
+          ),
+          Divider(height: 0),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.all(8),
+              child: TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) return '*this field must not be empty';
+                  return null;
+                },
+                controller: controller,
+                expands: true,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration.collapsed(
+                  hintText: 'JSON',
+                ),
+                autocorrect: false,
+                autofocus: false,
+                onChanged: (t) => this.input = t,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
