@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'dart:math';
@@ -13,7 +14,9 @@ abstract class Writter {
     // Decode it into a map
     try {
       json = jsonDecode(jsonString);
-      if (json != null && _isObjectOrArray(json)) _convert(json);
+      if (json != null && _isObjectOrArray(json)) {
+        _convert(json);
+      }
     } catch (e) {
       // JSON is not valid
       print('JSON is not valid');
@@ -31,20 +34,19 @@ abstract class Writter {
   _convert(dynamic object) {
     if (object == null) return;
 
-    if (object.runtimeType == Map) {
+    if (object is Map) {
       // This is an object, the key must be a string
       final map = object as Map<String, dynamic>;
       // Loop through this map
       map.keys.forEach((element) => _convert(map[element]));
-    } else if (object.runtimeType == List) {
+    } else if (object is List) {
       // This is an array
-      final list = object as List<dynamic>;
-      if (list.length > 0) {
+      if (object.length > 0) {
         // Make sure it has at least one element inside
         final random = Random();
         // -1 to get the index
-        int index = random.nextInt(list.length - 1);
-        _convert(list[index]);
+        int index = random.nextInt(object.length - 1);
+        _convert(object[index]);
       }
     } else {
       // This is a normal type
@@ -55,7 +57,9 @@ abstract class Writter {
   /// We only need to go deeper if it is an object or array. 
   /// In Dart, it is `Map` or `List` 
   _isObjectOrArray(dynamic anything) {
-    return anything.runtimeType == Map || anything.runtimeType == List;
+    final valid = anything is Map || anything is List;
+    print(valid);
+    return valid;
   }
 
   /// Convert dart types to types in other languages
