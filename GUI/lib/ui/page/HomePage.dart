@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => Navigator.push(context, 
               MaterialPageRoute(builder: (c) => AboutPage(), fullscreenDialog: true)
             ),
+            tooltip: 'About JSON: become TS',
           ),
         ],
       ),
@@ -79,61 +80,70 @@ class _HomePageState extends State<HomePage> {
     return Row(
       children: <Widget>[
         Expanded(
-          child: FlatButton.icon(
-            icon: Icon(Icons.content_paste),
-            label: Text('Paste'),
-            onPressed: () {
-              // Paste text into input
-              Clipboard.getData(Clipboard.kTextPlain).then((value) {
-                controller.text = value.text;
-              });
-            },
+          child: Tooltip(
+            message: 'Paste JSON string from clipboard',
+            child: FlatButton.icon(
+              icon: Icon(Icons.content_paste),
+              label: Text('Paste'),
+              onPressed: () {
+                // Paste text into input
+                Clipboard.getData(Clipboard.kTextPlain).then((value) {
+                  controller.text = value.text;
+                });
+              },
+            ),
           ),
         ),
         Expanded(
-          child: FlatButton.icon(
-            icon: Icon(Icons.compare_arrows),
-            label: Text('Convert'),
-            onPressed: () {
-              if (nameKey.currentState.validate()) {
-                final writter = WritterDart(this.input, this.jsonName);
-                if (writter.isValid()) {
-                  setState(() {
-                    this.output = writter.toString();
-                  });
-                } else {
-                  // Show a snack bar
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      duration: Duration(seconds: 1),
-                      content: Text("JSON is not valid :("),
-                    ),
-                  );
+          child: Tooltip(
+            message: 'JSON -> Code',
+            child: FlatButton.icon(
+              icon: Icon(Icons.compare_arrows),
+              label: Text('Convert'),
+              onPressed: () {
+                if (nameKey.currentState.validate()) {
+                  final writter = WritterDart(this.input, this.jsonName);
+                  if (writter.isValid()) {
+                    setState(() {
+                      this.output = writter.toString();
+                    });
+                  } else {
+                    // Show a snack bar
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text("JSON is not valid :("),
+                      ),
+                    );
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
         ),
         Expanded(
-          child: FlatButton.icon(
-            icon: Icon(Icons.content_copy),
-            label: Text('Copy'),
-            onPressed: () {
-              String text = "Nothing was copied...";
-              // I think it will crash if you copy `null`
-              if (this.output != null) {
-                Clipboard.setData(ClipboardData(text: this.output));
-                text = "Output has been copied :)";
-              }
+          child: Tooltip(
+            message: 'Copy generated code into clipboard',
+            child: FlatButton.icon(
+              icon: Icon(Icons.content_copy),
+              label: Text('Copy'),
+              onPressed: () {
+                String text = "Nothing was copied...";
+                // I think it will crash if you copy `null`
+                if (this.output != null) {
+                  Clipboard.setData(ClipboardData(text: this.output));
+                  text = "Output has been copied :)";
+                }
 
-              // Show a snack bar
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  duration: Duration(seconds: 1),
-                  content: Text(text),
-                ),
-              );
-            },
+                // Show a snack bar
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 1),
+                    content: Text(text),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],
