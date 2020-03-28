@@ -1,4 +1,5 @@
 import 'Writter.dart';
+import 'StringExtension.dart';
 
 class WritterDart extends Writter {
   WritterDart(String jsonString, String jsonName) : super(jsonString, jsonName);
@@ -11,7 +12,16 @@ class WritterDart extends Writter {
 
   @override
   String newEntry(String key, String type) {
-    // TODO: implement newEntry
-    throw UnimplementedError();
+    return '   ${typeConverter(type)} ${key.normalise()};';
+  }
+
+  @override
+  String newListEntry(String key, String type) {
+    return '   List<${typeConverter(type)}> ${key.normalise()};';
+  }
+
+  @override
+  String newMapEntry(String key, String type) {
+    return '   Map<String, ${typeConverter(type)}> ${key.normalise()};';
   }
 }

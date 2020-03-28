@@ -89,6 +89,8 @@ class _HomePageState extends State<HomePage> {
                 // Paste text into input
                 Clipboard.getData(Clipboard.kTextPlain).then((value) {
                   controller.text = value.text;
+                  // NOTE: Update input as well here so that it won't be null because text field wasn't changed
+                  this.input = value.text;
                 });
               },
             ),

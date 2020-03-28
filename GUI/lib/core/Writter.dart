@@ -40,7 +40,7 @@ abstract class Writter {
       // This is an object, the key must be a string
       final map = object as Map<String, dynamic>;
       // Loop through this map
-      map.keys.forEach((element) => _convert(map[element], className));
+      map.keys.forEach((element) => _convert(map[element], element));
     } else if (object is List) {
       // This is an array
       if (object.length > 0) {
@@ -53,7 +53,7 @@ abstract class Writter {
       }
     } else {
       // This is a normal type
-      print('${object.toString()} ${object.runtimeType.toString()}');
+      print('${object.toString()} ${object.runtimeType.toString()} | class is $className');
     }
   }
 
@@ -72,7 +72,11 @@ abstract class Writter {
   /// - double
   /// - bool
   String typeConverter(String type);
-  /// Usually it is just 
+  /// Usually it is `int`, `double` but it must not be `Map` or `List` 
   String newEntry(String key, String type);
+  /// This is used only for `Map` 
+  String newMapEntry(String key, String type);
+  /// Only for `List`
+  String newListEntry(String key, String type);
 }
 
