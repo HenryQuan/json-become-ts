@@ -1,5 +1,6 @@
 import 'package:GUI/core/writterDart.dart';
 import 'package:GUI/ui/page/AboutPage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,9 +16,12 @@ class _HomePageState extends State<HomePage> {
   String input;
   String output;
   String jsonName;
+  // This handles pasting text from clipboard
   final controller = TextEditingController();
   // This is for indicating the text field of name input
   final nameKey = GlobalKey<FormState>();
+  // For web, divider needs to be at least 1 in length to be visible
+  final double dividerLength = kIsWeb ? 1 : 0;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: buildLeftForm(),
                 ),
-                VerticalDivider(width: 0),
+                VerticalDivider(width: dividerLength),
                 Expanded(
                   child: ListView(
                     padding: EdgeInsets.all(8),
@@ -121,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                 Clipboard.setData(ClipboardData(text: this.output));
                 text = "Output has been copied :)";
               }
-              
+
               // Show a snack bar
               Scaffold.of(context).showSnackBar(
                 SnackBar(
@@ -159,7 +163,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Divider(height: 0),
+          Divider(height: dividerLength),
           Expanded(
             child: Container(
               margin: EdgeInsets.all(8),
