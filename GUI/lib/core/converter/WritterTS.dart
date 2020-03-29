@@ -43,4 +43,10 @@ class WritterTS extends Writter {
   String newMapEntry(String key, String type) {
     return '   ${key.normaliseVariable()}: Map<string, ${typeConverter(type)}>';
   }
+
+  @override
+  String writeClass(String className, String variables, List<String> keys) {
+    // TODO: implement writeClass
+    throw UnimplementedError();
+  }
 }

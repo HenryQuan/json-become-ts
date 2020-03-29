@@ -12,16 +12,28 @@ class WritterDart extends Writter {
 
   @override
   String newEntry(String key, String type) {
-    return '   ${typeConverter(type)} ${key.normaliseVariable()};';
+    return '$spaces${typeConverter(type)} ${key.normaliseVariable()};';
   }
 
   @override
   String newListEntry(String key, String type) {
-    return '   List<${typeConverter(type)}> ${key.normaliseVariable()};';
+    return '${spaces}List<${typeConverter(type)}> ${key.normaliseVariable()};';
   }
 
   @override
   String newMapEntry(String key, String type) {
-    return '   Map<String, ${typeConverter(type)}> ${key.normaliseVariable()};';
+    return '${spaces}Map<String, ${typeConverter(type)}> ${key.normaliseVariable()};';
+  }
+
+  @override
+  String writeClass(String className, String variables, List<String> keys) {
+    final goodClass = className.normaliseType();
+    return '/// This is the `$goodClass` class\n' +
+      'class $goodClass {\n' +
+      variables + 
+      '\n\n$spaces$goodClass(json) {\n' +
+      keys.map((e) => '$spaces${spaces}this.${e.normaliseVariable()} = json["$e"];').join('\n') +
+      '\n$spaces}' +
+      '\n}';
   }
 }

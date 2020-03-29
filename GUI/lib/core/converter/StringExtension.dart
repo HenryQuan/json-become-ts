@@ -18,14 +18,13 @@ extension StringExtension on String {
     if (type.endsWith('s')) type = type.substring(0, type.length - 1);
     else if (type.endsWith('es')) type = type.substring(0, type.length - 2);
     // Add something if the type starts with a number, 123 -> J123
-    if (type[0].isNumeric()) type = 'J' + type;
+    if (type[0].isNumeric()) type = 'K' + type;
     return type;
   }
 
   /// Add a letter if the variable starts when numbers
   String normaliseVariable() {
-    if (this[0].isNumeric()) return 'J' + this;
-    return this;
+    return this.normaliseType().lowerFirst();
   }
 
   /// Check if a string is numeric

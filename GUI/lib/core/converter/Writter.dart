@@ -12,6 +12,8 @@ abstract class Writter {
   dynamic json;
   /// There are different classes all in one place
   final Map<String, ModelClass> _classes = {};
+  /// How many spaces here
+  final spaces = List.filled(2, ' ').join();
 
   // These two handles error
   String _errorMessage;
@@ -72,7 +74,7 @@ abstract class Writter {
   String toString() {
     if (!isValid() || !_isObjectOrArray(json)) return 'null';
     // Join all lists first in the map and join again in the list
-    return _classes.keys.map((e) => e + '\n' + _classes[e].toString()).toList().join('\n\n');
+    return _classes.keys.map((e) => writeClass(e, _classes[e].toString(), _classes[e].keys)).toList().join('\n\n');
   }
 
   /// Convert json into any language
@@ -149,5 +151,7 @@ abstract class Writter {
   String newMapEntry(String key, String type);
   /// Only for `List`
   String newListEntry(String key, String type);
+  /// Write entire class out
+  String writeClass(String className, String variables, List<String> keys);
 }
 
