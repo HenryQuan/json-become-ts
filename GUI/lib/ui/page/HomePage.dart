@@ -62,15 +62,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 VerticalDivider(width: dividerLength),
                 Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.all(8),
-                    children: <Widget>[
-                      SelectableText(
-                        output ?? 'Output',
-                        style: TextStyle(fontSize: 16),
-                      )
-                    ],
-                  ),
+                  child: buildRightPanel(),
                 ),
               ],
             ),
@@ -78,6 +70,32 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Widget buildRightPanel() {
+    if (this.output == null) {
+      // Match textfield style
+      return Center(
+        child: Text(
+          'Output',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+        ),
+      );
+    } else {
+      final outputList = this.output.split('\n');
+      return Scrollbar(
+        child: ListView.builder(
+          itemCount: outputList.length,
+          padding: EdgeInsets.all(9),
+          itemBuilder: (context, index) {
+            return Text(
+              outputList[index],
+              style: TextStyle(fontSize: 16),
+            );
+          },
+        ),
+      );
+    }                  
   }
 
   /// This `Row` contains three `FlatButton` with `icons`
@@ -96,6 +114,11 @@ class _HomePageState extends State<HomePage> {
                   controller.text = value.text;
                   // NOTE: Update input as well here so that it won't be null because text field wasn't changed
                   this.input = value.text;
+                });
+
+                // Clear up outputs
+                setState(() {
+                  this.output = null;  
                 });
               },
             ),
@@ -185,21 +208,24 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: Container(
               margin: EdgeInsets.all(8),
-              child: TextFormField(
-                validator: (value) {
-                  if (value.isEmpty) return '*this field must not be empty';
-                  return null;
-                },
-                controller: controller,
-                expands: true,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'JSON',
+              child: Scrollbar(
+                child: TextFormField(
+                  validator: (value) {
+                    if (value.isEmpty) return '*this field must not be empty';
+                    return null;
+                  },
+                  controller: controller,
+                  expands: true,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  enableInteractiveSelection: true,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'JSON',
+                  ),
+                  autocorrect: false,
+                  autofocus: false,
+                  onChanged: (t) => this.input = t,
                 ),
-                autocorrect: false,
-                autofocus: false,
-                onChanged: (t) => this.input = t,
               ),
             ),
           ),
