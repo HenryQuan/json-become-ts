@@ -149,6 +149,7 @@ abstract class Writter {
   /// - int
   /// - double
   /// - bool
+  /// - dynamic
   String typeConverter(String type);
   /// Usually it is `int`, `double` but it must not be `Map` or `List` 
   String newEntry(String key, String type);

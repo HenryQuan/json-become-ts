@@ -1,3 +1,4 @@
+import 'package:GUI/core/converter/WritterTS.dart';
 import 'package:GUI/core/converter/writterDart.dart';
 import 'package:GUI/ui/page/AboutPage.dart';
 import 'package:flutter/foundation.dart';
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
               label: Text('Convert'),
               onPressed: () {
                 if (nameKey.currentState.validate()) {
-                  final writter = WritterDart(this.input, this.jsonName);
+                  final writter = WritterTS(this.input, this.jsonName);
                   if (writter.isValid()) {
                     setState(() {
                       this.output = writter.toString();

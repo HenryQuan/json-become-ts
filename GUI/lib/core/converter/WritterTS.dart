@@ -22,6 +22,9 @@ class WritterTS extends Writter {
       case 'bool':
         ts = 'boolean';
         break;
+      case 'dynamic':
+        ts = 'any';
+        break;
       default:
         break;
     }
@@ -31,22 +34,28 @@ class WritterTS extends Writter {
 
   @override
   String newEntry(String key, String type) {
-    return '   ${key.normaliseVariable()}: ${typeConverter(type)}';
+    return '$spaces${key.normaliseVariable()}: ${typeConverter(type)}';
   }
 
   @override
   String newListEntry(String key, String type) {
-    return '   ${key.normaliseVariable()}: ${typeConverter(type)}[]';
+    return '$spaces${key.normaliseVariable()}: ${typeConverter(type)}[]';
   }
 
   @override
   String newMapEntry(String key, String type) {
-    return '   ${key.normaliseVariable()}: Map<string, ${typeConverter(type)}>';
+    return '$spaces${key.normaliseVariable()}: Map<string, ${typeConverter(type)}>';
   }
 
   @override
   String writeClass(String className, String variables, Set<String> keys) {
-    // TODO: implement writeClass
-    throw UnimplementedError();
+    final goodClass = className.normaliseType();
+    return '/** This is the `$goodClass` class */\n' +
+      'class $goodClass {\n' +
+      variables + 
+      '\n\n${spaces}constructor(json) {\n' +
+      keys.map((e) => '$spaces${spaces}this.${e.normaliseVariable()} = json["$e"];').join('\n') +
+      '\n$spaces}' +
+      '\n}';
   }
 }
