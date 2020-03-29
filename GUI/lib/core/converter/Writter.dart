@@ -14,6 +14,8 @@ abstract class Writter {
   final Map<String, ModelClass> _classes = {};
   /// How many spaces here
   final spaces = List.filled(2, ' ').join();
+  /// Check when to use `Map` 
+  final mapThreshold = 10;
 
   // These two handles error
   String _errorMessage;
@@ -87,6 +89,7 @@ abstract class Writter {
         final element = map[k];
         final goodType = k.normaliseType();
         if (element is Map) {
+          // Check that it is not empty
           if (element.isNotEmpty) {
             _addToMap(className, k, newEntry(k, goodType));
             // Another object so we need to loop through it again
@@ -97,25 +100,27 @@ abstract class Writter {
           }
         } else if (element is List) {
           // Make sure it is not an empty list
-          if (element.length > 0 && element[0] != null) {
+          if (element.isNotEmpty && element[0] != null) {
             // Check if it has plain type
             if (_isObjectOrArray(element[0])) {
+              // Use key as the type name
               _addToMap(className, k, newListEntry(k, goodType));
               // We need another class if it is either map or list
               _convert(element, goodType);
             } else {
-              _addToMap(className, k, newListEntry(k, element[0].runtimeType.toString()));
-              // Not needed
-              _convert(element, className);
+              // Use element's type
+              _addToMap(className, k, newListEntry(k, _typeString(element[0])));
+              // We don't need to go further than this
             }
           }
         } else {
-          _addToMap(className, k, newEntry(k, element.runtimeType.toString()));
+          // Just use element's type
+          _addToMap(className, k, newEntry(k, _typeString(element)));
         }
       });
     } else if (object is List) {
       // This is an array
-      if (object.length > 0) {
+      if (object.isNotEmpty) {
         // Make sure it has at least one element inside
         final random = Random();
         // -1 to get the index
@@ -124,6 +129,20 @@ abstract class Writter {
         _convert(object[index], className);
       }
     }
+  }
+
+  /// Returns the type string of anything
+  String _typeString(dynamic object) => object.runtimeType.toString();
+
+  /// If an objects only has one single type inside (like all strings)
+  bool _hasSameChilren(Map object) {
+    Type childrenType;
+    return object.keys.every((k) {
+      if (childrenType == null) {
+        childrenType = object[k].runtimeType;
+        return true;
+      } else return object[k].runtimeType == childrenType;
+    });
   }
 
   /// This does a check if the key is already used

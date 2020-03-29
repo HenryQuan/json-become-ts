@@ -27,14 +27,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('JSON: become TS'),
+        title: Text('JSON: Become TS'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.info_outline), 
             onPressed: () => Navigator.push(context, 
               MaterialPageRoute(builder: (c) => AboutPage(), fullscreenDialog: true)
             ),
-            tooltip: 'About JSON: become TS',
+            tooltip: 'About JSON: Become TS',
           ),
         ],
       ),

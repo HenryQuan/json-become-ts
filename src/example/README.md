@@ -1,3 +1,3 @@
 # Example
 `json` folder contains some json files. 
-The rest is what `JSON: become TS` generates.
+The rest is what `JSON: Become TS` generates.

@@ -1,10 +1,10 @@
-# JSON: become TS
+# JSON: Become TS
 Work in progress JSON to TypeScript converter.
 
 ## About
-It was called `json2ts` but others have used this name so I changed it to `JSON: become TS`. Yes, the naming is inspired by a certain game. 
+It was called `json2ts` but others have used this name so I changed it to `JSON: Become TS`. Yes, the naming is inspired by a certain game. 
 
-It is another tool that I need for [WoWs Info](https://github.com/HenryQuan/WoWs-Info-Re). Other tools I found only generate everything in a single file and that's not what I want. Therefore, `JSON: become TS` will help you to create files and directories automatically.
+It is another tool that I need for [WoWs Info](https://github.com/HenryQuan/WoWs-Info-Re). Other tools I found only generate everything in a single file and that's not what I want. Therefore, `JSON: Become TS` will help you to create files and directories automatically.
 
 ### Dart support
 Dart support has been added but it might need some manual adjustments due to the type `number` can be both `int` and `double`.
