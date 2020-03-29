@@ -1,27 +1,22 @@
-import 'ModelEntry.dart';
-import 'StringExtension.dart';
-
 /// It stores a class converted from JSON
 /// - entry with type
 /// - more helper functions
 class ModelClass {
-  List<ModelEntry> entries = [];
-  void addEntry(ModelEntry entry) => entries.add(entry);
+  /// This includes complete entries, int number
+  List<String> entries = [];
+  /// This only includes the key, number
+  List<String> keys = [];
+  void add(String key, String entry) {
+    entries.add(entry);
+    keys.add(key);
+  }
 
-  ModelClass(ModelEntry entry) {
-    addEntry(entry);
+  ModelClass(String key, String entry) {
+    add(key, entry);
   }
 
   @override
   String toString() {
-    return entries.map((e) {
-      if (e.type is Map) {
-        return '${e.key.normaliseType()} ${e.key.normaliseVariable()}';
-      } else if (e.type is List) {
-        return 'List<> ${e.key}';
-      } else {
-        return '${e.getType()} ${e.key}';
-      }
-    }).toList().join('\n');
+    return entries.join('\n');    
   }
 }

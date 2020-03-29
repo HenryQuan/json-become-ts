@@ -1,4 +1,3 @@
-import 'ModelEntry.dart';
 import 'ModelClass.dart';
 
 import 'StringExtension.dart';
@@ -84,20 +83,27 @@ abstract class Writter {
       // Loop through this map
       map.keys.forEach((k) {
         final element = map[k];
-        _addToMap(className, ModelEntry(k, element));
+        final goodType = k.normaliseType();
         if (element is Map) {
+          _addToMap(className, k, newEntry(k, goodType));
           // Another object so we need to loop through it again
-          _convert(element, k.normaliseType());
+          _convert(element, goodType);
         } else if (element is List) {
-          // Check if it has plain type
-          if (_isObjectOrArray(element[0])) {
-            // We need another class if it is either map or list
-            _convert(element, k.normaliseType());
-          } else {
-            // Not needed
-            _convert(element, className);
+          // Make sure it is not an empty list
+          if (element.length > 0 && element[0] != null) {
+            // Check if it has plain type
+            if (_isObjectOrArray(element[0])) {
+              _addToMap(className, k, newListEntry(k, goodType));
+              // We need another class if it is either map or list
+              _convert(element, goodType);
+            } else {
+              _addToMap(className, k, newListEntry(k, element[0].runtimeType.toString()));
+              // Not needed
+              _convert(element, className);
+            }
           }
         } else {
+          _addToMap(className, k, newEntry(k, element.runtimeType.toString()));
         }
       });
     } else if (object is List) {
@@ -114,11 +120,11 @@ abstract class Writter {
   }
 
   /// This does a check if the key is already used
-  _addToMap(String key, ModelEntry entry) {
-    final value = this._classes[key];
+  _addToMap(String className, String key, String entry) {
+    final value = this._classes[className];
     // Init if value is null
-    if (value == null) this._classes[key] = ModelClass(entry);
-    else value.addEntry(entry);
+    if (value == null) this._classes[className] = ModelClass(key, entry);
+    else value.add(key, entry);
   }
 
   /// We only need to go deeper if it is an object or array. 
