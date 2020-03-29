@@ -62,7 +62,21 @@ class _HomePageState extends State<HomePage> {
                 ),
                 VerticalDivider(width: dividerLength),
                 Expanded(
-                  child: buildRightPanel(),
+                  child: Column(
+                    children: <Widget>[
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 64),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: List.filled(100, 'HelloWorld').map((e) => Center(child: Text(e))).toList(),
+                        )
+                      ),
+                      Divider(height: 0),
+                      Expanded(
+                        child: buildRightPanel()
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -75,10 +89,14 @@ class _HomePageState extends State<HomePage> {
   Widget buildRightPanel() {
     if (this.output == null) {
       // Match textfield style
-      return Center(
-        child: Text(
-          'Output',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+      return Align(
+        alignment: Alignment.topLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Output',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
         ),
       );
     } else {
