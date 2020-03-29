@@ -27,13 +27,13 @@ abstract class Writter {
       if (isValid() && _isObjectOrArray(json)) {
         _convert(json, jsonName);
       }
-    } catch (e) {
+    } catch (e, s) {
       // JSON is not valid but the reason is unknown
       this._errorMessage = e.toString().split(':').removeLast().trim();
       // On web, it has different error code
       final temp = _errorMessage.split('\n');
       if (temp.length > 2) this._errorLine = temp[1];
-      print('JSON is not valid');
+      print(s);
     }
   }
 
@@ -87,9 +87,14 @@ abstract class Writter {
         final element = map[k];
         final goodType = k.normaliseType();
         if (element is Map) {
-          _addToMap(className, k, newEntry(k, goodType));
-          // Another object so we need to loop through it again
-          _convert(element, goodType);
+          if (element.isNotEmpty) {
+            _addToMap(className, k, newEntry(k, goodType));
+            // Another object so we need to loop through it again
+            _convert(element, goodType);
+          } else {
+            // It has nothing inside so it is a dynamic
+            _addToMap(className, k, newEntry(k, 'dynamic'));
+          }
         } else if (element is List) {
           // Make sure it is not an empty list
           if (element.length > 0 && element[0] != null) {
@@ -152,6 +157,6 @@ abstract class Writter {
   /// Only for `List`
   String newListEntry(String key, String type);
   /// Write entire class out
-  String writeClass(String className, String variables, List<String> keys);
+  String writeClass(String className, String variables, Set<String> keys);
 }
 

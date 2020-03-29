@@ -45,7 +45,7 @@ class WritterTS extends Writter {
   }
 
   @override
-  String writeClass(String className, String variables, List<String> keys) {
+  String writeClass(String className, String variables, Set<String> keys) {
     // TODO: implement writeClass
     throw UnimplementedError();
   }

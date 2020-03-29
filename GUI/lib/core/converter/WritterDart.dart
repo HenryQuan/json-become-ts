@@ -26,7 +26,7 @@ class WritterDart extends Writter {
   }
 
   @override
-  String writeClass(String className, String variables, List<String> keys) {
+  String writeClass(String className, String variables, Set<String> keys) {
     final goodClass = className.normaliseType();
     return '/// This is the `$goodClass` class\n' +
       'class $goodClass {\n' +
