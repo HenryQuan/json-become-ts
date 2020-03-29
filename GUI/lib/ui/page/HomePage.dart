@@ -1,5 +1,4 @@
-import 'package:GUI/core/converter/WritterTS.dart';
-import 'package:GUI/core/converter/writterDart.dart';
+import 'package:GUI/core/converter/WritterDart.dart';
 import 'package:GUI/ui/page/AboutPage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                         constraints: BoxConstraints(maxHeight: 64),
                         child: ListView(
                           scrollDirection: Axis.horizontal,
-                          children: List.filled(100, 'HelloWorld').map((e) => Center(child: Text(e))).toList(),
+                          children: List.filled(5, ' Work in progress... ').map((e) => Center(child: Text(e))).toList(),
                         )
                       ),
                       Divider(height: 0),
@@ -150,7 +149,7 @@ class _HomePageState extends State<HomePage> {
               label: Text('Convert'),
               onPressed: () {
                 if (nameKey.currentState.validate()) {
-                  final writter = WritterTS(this.input, this.jsonName);
+                  final writter = WritterDart(this.input, this.jsonName);
                   if (writter.isValid()) {
                     setState(() {
                       this.output = writter.toString();

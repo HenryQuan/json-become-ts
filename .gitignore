@@ -13,3 +13,4 @@ gameVersion/
 # Mac temp files
 ._*
 .DS_Store
+*.log
