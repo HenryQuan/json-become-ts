@@ -85,10 +85,8 @@ abstract class Writter {
       // Make sure it has at least one element inside
       if (object.isNotEmpty) _convert(object[0], className);
     } else if (object is Map) {
-      final merged = object.mergeChildren();
-      print(merged);
       // This is an object, the key must be a string
-      final map = object as Map<String, dynamic>;
+      final map = (object as Map<String, dynamic>);
       // Loop through this map
       map.keys.forEach((k) {
         final element = map[k];
