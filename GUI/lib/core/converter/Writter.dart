@@ -91,9 +91,23 @@ abstract class Writter {
         if (element is Map) {
           // Check that it is not empty
           if (element.isNotEmpty) {
-            _addToMap(className, k, newEntry(k, goodType));
-            // Another object so we need to loop through it again
-            _convert(element, goodType);
+            // Check if `Map` should be used here
+            if (element.length > mapThreshold && _sameChildrenType(element)) {
+              final firstElement = element.values.first;
+              // Check if the first element has a plain type
+              if (_isObjectOrArray(firstElement)) {
+                _addToMap(className, k, newMapEntry(k, goodType));
+                // Go deeper
+                _convert(firstElement, goodType);
+              } else {
+                // Write to class
+                _addToMap(className, k, newMapEntry(k, _typeString(firstElement)));
+              }
+            } else {
+              _addToMap(className, k, newEntry(k, goodType));
+              // Another object so we need to loop through it again
+              _convert(element, goodType);
+            }
           } else {
             // It has nothing inside so it is a dynamic
             _addToMap(className, k, newEntry(k, 'dynamic'));
@@ -122,11 +136,7 @@ abstract class Writter {
       // This is an array
       if (object.isNotEmpty) {
         // Make sure it has at least one element inside
-        final random = Random();
-        // -1 to get the index
-        int index = random.nextInt(object.length - 1);
-        print('Lucky index is $index');
-        _convert(object[index], className);
+        _convert(object[0], className);
       }
     }
   }
@@ -135,7 +145,7 @@ abstract class Writter {
   String _typeString(dynamic object) => object.runtimeType.toString();
 
   /// If an objects only has one single type inside (like all strings)
-  bool _hasSameChilren(Map object) {
+  bool _sameChildrenType(Map object) {
     Type childrenType;
     return object.keys.every((k) {
       if (childrenType == null) {
