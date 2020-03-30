@@ -91,16 +91,7 @@ abstract class Writter {
         // Empty map
         _addToMap(className, key, newEntry(key, 'dynamic'));
       } else if (object[0] != null) {
-        // Check if it has plain type
-        if (_isObjectOrArray(object[0])) {
-          // Use key as the type name
-          _addToMap(className, key, newListEntry(key, type));
-          // We need another class if it is either map or list
-          _convert(object[0], type);
-        } else {
-          // Use element's type
-          _addToMap(className, key, newListEntry(key, _typeString(object[0])));
-        }
+        _convert(object[0], className);
       }
     } else if (object is Map) {
       if (object.length == 0) {
@@ -113,7 +104,6 @@ abstract class Writter {
           // This is a Map
           final firstElement = object.values.first;
           if (firstElement is Map) {
-            _addToMap(className, key, newMapEntry(key, type));
             // Keep getting everything
             _convert(map.mergeChildren(), type);
           } else {
@@ -125,8 +115,24 @@ abstract class Writter {
           map.keys.forEach((k) {
             final element = map[k];
             final goodType = k.normaliseType();
-            if (_isObjectOrArray(element)) {
-              _addToMap(className, k, newEntry(k, goodType));
+            if (element is Map) {
+              if (element.length > mapThreshold && element.sameChildrenType()) {
+                // This is a Map
+                final firstElement = element.values.first;
+                if (firstElement is Map) {
+                  _addToMap(className, k, newMapEntry(k, goodType));
+                  // Keep getting everything
+                  _convert(element, goodType);
+                } else {
+                  // Plain type set and stop
+                  _addToMap(className, k, newMapEntry(k, _typeString(firstElement)));
+                }
+              } else {
+                _addToMap(className, k, newEntry(k, goodType));
+                _convert(element, goodType);
+              }
+            } else if (element is List) {
+              _addToMap(className, k, newListEntry(k, goodType));
               _convert(element, goodType);
             } else {
               // Just use element's type
