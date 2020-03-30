@@ -89,61 +89,53 @@ abstract class Writter {
     } else if (object is Map) {
       // This is an object, the key must be a string
       Map<String, dynamic> map = object;
-      if (shouldMerge) {
-        final temp = map.mergeChildren();
-        if (temp != map) {
-          shouldMerge = false;
-          map = temp; 
+      
+      // Check if Map should be used
+      if (object.length > mapThreshold && object.sameChildrenType()) {
+        final oneElement = object.values.first;
+        if (oneElement is Map) {
+          _addToMap(className, className, newMapEntry(className, className));
+          _convert(oneElement, className);
+        } else {
+          _addToMap(className, className, newMapEntry(className, _typeString(oneElement)));
         }
-      }
-      // Loop through this map
-      map.keys.forEach((k) {
-        final element = map[k];
-        final goodType = k.normaliseType();
-        if (element is Map) {
-          // Check that it is not empty
-          if (element.isNotEmpty) {
-            // Check if `Map` should be used here
-            if (element.length > mapThreshold && element.sameChildrenType()) {
-              final firstElement = element.values.first;
-              // Check if the first element has a plain type
-              if (_isObjectOrArray(firstElement)) {
-                _addToMap(className, k, newMapEntry(k, goodType));
-                // Go deeper
-                _convert(firstElement, goodType);
-              } else {
-                // Write to class
-                _addToMap(className, k, newMapEntry(k, _typeString(firstElement)));
-              }
-            } else {
+      } else {
+        // Loop through this map
+        map.keys.forEach((k) {
+          final element = map[k];
+          final goodType = k.normaliseType();
+          if (element is Map) {
+            // Check that it is not empty
+            if (element.isNotEmpty) {
+              // Go deeper
               _addToMap(className, k, newEntry(k, goodType));
               // Another object so we need to loop through it again
               _convert(element, goodType);
+            } else {
+              // It has nothing inside so it is a dynamic
+              _addToMap(className, k, newEntry(k, 'dynamic'));
+            }
+          } else if (element is List) {
+            // Make sure it is not an empty list
+            if (element.isNotEmpty && element[0] != null) {
+              // Check if it has plain type
+              if (_isObjectOrArray(element[0])) {
+                // Use key as the type name
+                _addToMap(className, k, newListEntry(k, goodType));
+                // We need another class if it is either map or list
+                _convert(element, goodType);
+              } else {
+                // Use element's type
+                _addToMap(className, k, newListEntry(k, _typeString(element[0])));
+                // We don't need to go further than this
+              }
             }
           } else {
-            // It has nothing inside so it is a dynamic
-            _addToMap(className, k, newEntry(k, 'dynamic'));
+            // Just use element's type
+            _addToMap(className, k, newEntry(k, _typeString(element)));
           }
-        } else if (element is List) {
-          // Make sure it is not an empty list
-          if (element.isNotEmpty && element[0] != null) {
-            // Check if it has plain type
-            if (_isObjectOrArray(element[0])) {
-              // Use key as the type name
-              _addToMap(className, k, newListEntry(k, goodType));
-              // We need another class if it is either map or list
-              _convert(element, goodType);
-            } else {
-              // Use element's type
-              _addToMap(className, k, newListEntry(k, _typeString(element[0])));
-              // We don't need to go further than this
-            }
-          }
-        } else {
-          // Just use element's type
-          _addToMap(className, k, newEntry(k, _typeString(element)));
-        }
-      });
+        });
+      }
     }
   }
 

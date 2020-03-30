@@ -3,10 +3,7 @@ extension MapExtension<T, K> on Map<T, K> {
   Map<T, K> mergeChildren() {
     // Only merge if all children have the same type
     if (this.sameChildrenType() && this.values.first is Map) {
-      final Map<T, K> merged = this.values.fold({}, (prev, curr) => merge(prev, curr as Map));
-      final Map<T, K> newMap = {};
-      this.keys.forEach((k) => newMap[k] = merged as K);
-      return newMap;
+      return this.values.fold({}, (prev, curr) => merge(prev, curr as Map));
     }
 
     // This is already merged
