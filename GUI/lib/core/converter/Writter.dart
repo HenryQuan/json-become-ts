@@ -87,8 +87,10 @@ abstract class Writter {
     final type = className.normaliseType();
     // object can either be array or object, if not returns null
     if (object is List) {
-      // Make sure it is not an empty list
-      if (object.isNotEmpty && object[0] != null) {
+      if (object.length == 0) {
+        // Empty map
+        _addToMap(className, key, newEntry(key, 'dynamic'));
+      } else if (object[0] != null) {
         // Check if it has plain type
         if (_isObjectOrArray(object[0])) {
           // Use key as the type name
@@ -101,39 +103,37 @@ abstract class Writter {
         }
       }
     } else if (object is Map) {
-      // The key must be a string because it is JSON
-      final Map<String, dynamic> map = object;
-      if (map.length > mapThreshold && map.sameChildrenType()) {
-        // This is a Map
-        final firstElement = object.values.first;
-        if (firstElement is Map) {
-          _addToMap(className, key, newMapEntry(key, type));
-          // Keep getting everything
-          _convert(firstElement, type);
-        } else {
-          // Plain type set and stop
-          _addToMap(className, key, newMapEntry(key, _typeString(firstElement)));
-        }
+      if (object.length == 0) {
+        // Empty map
+        _addToMap(className, key, newEntry(key, 'dynamic'));
       } else {
-        // Not a map so loop through everything
-        map.keys.forEach((k) {
-          final element = map[k];
-          final type = k.normaliseType();
-          if (element is Map) {
-            // Check that it is not empty
-            if (element.isNotEmpty) {
-              _addToMap(className, k, newEntry(k, type));
-              // Another object so we need to loop through it again
-              _convert(element, type);
-            } 
-          } else if (element is List) {
-            // Leave this to recursion
-            _convert(element, type);
+        // The key must be a string because it is JSON
+        final Map<String, dynamic> map = object;
+        if (map.length > mapThreshold && map.sameChildrenType()) {
+          // This is a Map
+          final firstElement = object.values.first;
+          if (firstElement is Map) {
+            _addToMap(className, key, newMapEntry(key, type));
+            // Keep getting everything
+            _convert(firstElement.mergeChildren(), type);
           } else {
-            // Just use element's type
-            _addToMap(className, k, newEntry(k, _typeString(element)));
+            // Plain type set and stop
+            _addToMap(className, key, newMapEntry(key, _typeString(firstElement)));
           }
-        });
+        } else {
+          // Not a map so loop through everything
+          map.keys.forEach((k) {
+            final element = map[k];
+            final goodType = k.normaliseType();
+            if (_isObjectOrArray(element)) {
+              _addToMap(className, k, newEntry(k, goodType));
+              _convert(element, goodType);
+            } else {
+              // Just use element's type
+              _addToMap(className, k, newEntry(k, _typeString(element)));
+            }
+          });
+        }
       }
     }
   }
