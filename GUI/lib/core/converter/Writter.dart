@@ -1,6 +1,7 @@
 import 'ModelClass.dart';
 
 import 'StringExtension.dart';
+import 'MapExtension.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ abstract class Writter {
           // Check that it is not empty
           if (element.isNotEmpty) {
             // Check if `Map` should be used here
-            if (element.length > mapThreshold && _sameChildrenType(element)) {
+            if (element.length > mapThreshold && element.sameChildrenType()) {
               final firstElement = element.values.first;
               // Check if the first element has a plain type
               if (_isObjectOrArray(firstElement)) {
@@ -142,17 +143,6 @@ abstract class Writter {
 
   /// Returns the type string of anything
   String _typeString(dynamic object) => object.runtimeType.toString();
-
-  /// If an objects only has one single type inside (like all strings)
-  bool _sameChildrenType(Map object) {
-    Type childrenType;
-    return object.keys.every((k) {
-      if (childrenType == null) {
-        childrenType = object[k].runtimeType;
-        return true;
-      } else return object[k].runtimeType == childrenType;
-    });
-  }
 
   /// This does a check if the key is already used
   _addToMap(String className, String key, String entry) {
