@@ -7,7 +7,7 @@ class Ultimate {
   bool woWsInfoSwapButton;
   bool woWsInfoFullscreenAd;
   bool woWsInfoBannerAd;
-  dynamic woWsInfoUserData;
+  WoWsInfoUserData woWsInfoUserData;
   DataEncyclopedia dataEncyclopedia;
   WoWsInfoPlayerList woWsInfoPlayerList;
   Map<String, String> woWsInfoThemeColour;
@@ -71,6 +71,15 @@ class WoWsInfoUserInfo {
     this.nickname = json["nickname"];
     this.accountId = json["account_id"];
     this.server = json["server"];
+  }
+}
+
+/// This is the `WoWsInfoUserData` class
+class WoWsInfoUserData {
+  dynamic woWsInfoUserData;
+
+  WoWsInfoUserData(json) {
+    this.woWsInfoUserData = json["woWsInfoUserData"];
   }
 }
 
@@ -297,7 +306,7 @@ class DataWarship {
 
 /// This is the `DataConsumable` class
 class DataConsumable {
-  Profile profile;
+  Map<String, Profile> profile;
   String description;
   int priceGold;
   String image;
@@ -305,6 +314,7 @@ class DataConsumable {
   int priceCredit;
   String type;
   String name;
+  int slot;
 
   DataConsumable(json) {
     this.profile = json["profile"];
@@ -315,67 +325,15 @@ class DataConsumable {
     this.priceCredit = json["price_credit"];
     this.type = json["type"];
     this.name = json["name"];
+    this.slot = json["slot"];
   }
 }
 
 /// This is the `Profile` class
 class Profile {
-  ExpFactor expFactor;
-  CreditsFactor creditsFactor;
-  VisibilityFactor visibilityFactor;
-  AfterBattleRepair afterBattleRepair;
-  ShootShift shootShift;
+  String description;
 
   Profile(json) {
-    this.expFactor = json["expFactor"];
-    this.creditsFactor = json["creditsFactor"];
-    this.visibilityFactor = json["visibilityFactor"];
-    this.afterBattleRepair = json["afterBattleRepair"];
-    this.shootShift = json["shootShift"];
-  }
-}
-
-/// This is the `ExpFactor` class
-class ExpFactor {
-  String description;
-
-  ExpFactor(json) {
-    this.description = json["description"];
-  }
-}
-
-/// This is the `CreditsFactor` class
-class CreditsFactor {
-  String description;
-
-  CreditsFactor(json) {
-    this.description = json["description"];
-  }
-}
-
-/// This is the `VisibilityFactor` class
-class VisibilityFactor {
-  String description;
-
-  VisibilityFactor(json) {
-    this.description = json["description"];
-  }
-}
-
-/// This is the `AfterBattleRepair` class
-class AfterBattleRepair {
-  String description;
-
-  AfterBattleRepair(json) {
-    this.description = json["description"];
-  }
-}
-
-/// This is the `ShootShift` class
-class ShootShift {
-  String description;
-
-  ShootShift(json) {
     this.description = json["description"];
   }
 }
