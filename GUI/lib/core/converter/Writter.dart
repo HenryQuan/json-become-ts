@@ -81,7 +81,12 @@ abstract class Writter {
 
   /// Convert json into any language
   _convert(dynamic object, String className) {
-    if (object is Map) {
+    if (object is List) {
+      // Make sure it has at least one element inside
+      if (object.isNotEmpty) _convert(object[0], className);
+    } else if (object is Map) {
+      final merged = object.mergeChildren();
+      print(merged);
       // This is an object, the key must be a string
       final map = object as Map<String, dynamic>;
       // Loop through this map
@@ -132,12 +137,6 @@ abstract class Writter {
           _addToMap(className, k, newEntry(k, _typeString(element)));
         }
       });
-    } else if (object is List) {
-      // This is an array
-      if (object.isNotEmpty) {
-        // Make sure it has at least one element inside
-        _convert(object[0], className);
-      }
     }
   }
 
