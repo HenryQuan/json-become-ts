@@ -1,4 +1,6 @@
+import 'package:GUI/core/converter/Converter.dart';
 import 'package:GUI/core/converter/WritterDart.dart';
+import 'package:GUI/core/converter/WritterTS.dart';
 import 'package:GUI/ui/page/AboutPage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,12 @@ class _HomePageState extends State<HomePage> {
   final nameKey = GlobalKey<FormState>();
   // For web, divider needs to be at least 1 in length to be visible
   final double dividerLength = kIsWeb ? 1 : 0;
+
+  int selectedChip = 0;
+  final List<Converter> converters = [
+    Converter('Dart', (String jsonString, String jsonName) => WritterDart(jsonString, jsonName)),
+    Converter('TypeScript', (String jsonString, String jsonName) => WritterTS(jsonString, jsonName)),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +73,26 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       ConstrainedBox(
                         constraints: BoxConstraints(maxHeight: 64),
-                        child: ListView(
+                        child:ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          children: List.filled(5, ' Work in progress... ').map((e) => Center(child: Text(e))).toList(),
-                        )
+                          itemCount: converters.length,
+                          padding: EdgeInsets.all(8),
+                          itemBuilder: (context, index) {
+                            final converter = converters[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: InputChip(
+                                label: Text(converter.name),
+                                selected: index == selectedChip,
+                                onPressed: () {
+                                  setState(() {
+                                    selectedChip = index;
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       Divider(height: 0),
                       Expanded(
@@ -103,7 +127,8 @@ class _HomePageState extends State<HomePage> {
       return Scrollbar(
         child: ListView.builder(
           itemCount: outputList.length,
-          padding: EdgeInsets.all(9),
+          padding: EdgeInsets.all(8),
+          itemExtent: 20,
           itemBuilder: (context, index) {
             return Text(
               outputList[index],
@@ -149,7 +174,7 @@ class _HomePageState extends State<HomePage> {
               label: Text('Convert'),
               onPressed: () {
                 if (nameKey.currentState.validate()) {
-                  final writter = WritterDart(this.input, this.jsonName);
+                  final writter = converters[selectedChip].writter(this.input, this.jsonName);
                   if (writter.isValid()) {
                     setState(() {
                       this.output = writter.toString();
