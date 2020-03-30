@@ -115,7 +115,7 @@ abstract class Writter {
           if (firstElement is Map) {
             _addToMap(className, key, newMapEntry(key, type));
             // Keep getting everything
-            _convert(firstElement.mergeChildren(), type);
+            _convert(map.mergeChildren(), type);
           } else {
             // Plain type set and stop
             _addToMap(className, key, newMapEntry(key, _typeString(firstElement)));
