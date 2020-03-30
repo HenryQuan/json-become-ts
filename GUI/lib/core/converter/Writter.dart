@@ -16,6 +16,8 @@ abstract class Writter {
   final spaces = List.filled(2, ' ').join();
   /// Check when to use `Map` 
   final mapThreshold = 10;
+  /// Whether map should be merged
+  bool shouldMerge = true;
 
   // These two handles error
   String _errorMessage;
@@ -27,7 +29,7 @@ abstract class Writter {
     try {
       json = jsonDecode(jsonString);
       if (isValid() && _isObjectOrArray(json)) {
-        _convert(json, jsonName, true);
+        _convert(json, jsonName);
       }
     } catch (e, s) {
       // JSON is not valid but the reason is unknown
@@ -80,14 +82,20 @@ abstract class Writter {
   }
 
   /// Convert json into any language
-  _convert(dynamic object, String className, bool merge) {
+  _convert(dynamic object, String className) {
     if (object is List) {
       // Make sure it has at least one element inside
-      if (object.isNotEmpty) _convert(object[0], className, true);
+      if (object.isNotEmpty) _convert(object[0], className);
     } else if (object is Map) {
       // This is an object, the key must be a string
       Map<String, dynamic> map = object;
-      if (merge) map = map.mergeChildren();
+      if (shouldMerge) {
+        final temp = map.mergeChildren();
+        if (temp != map) {
+          shouldMerge = false;
+          map = temp; 
+        }
+      }
       // Loop through this map
       map.keys.forEach((k) {
         final element = map[k];
@@ -102,7 +110,7 @@ abstract class Writter {
               if (_isObjectOrArray(firstElement)) {
                 _addToMap(className, k, newMapEntry(k, goodType));
                 // Go deeper
-                _convert(firstElement, goodType, false);
+                _convert(firstElement, goodType);
               } else {
                 // Write to class
                 _addToMap(className, k, newMapEntry(k, _typeString(firstElement)));
@@ -110,7 +118,7 @@ abstract class Writter {
             } else {
               _addToMap(className, k, newEntry(k, goodType));
               // Another object so we need to loop through it again
-              _convert(element, goodType, false);
+              _convert(element, goodType);
             }
           } else {
             // It has nothing inside so it is a dynamic
@@ -124,7 +132,7 @@ abstract class Writter {
               // Use key as the type name
               _addToMap(className, k, newListEntry(k, goodType));
               // We need another class if it is either map or list
-              _convert(element, goodType, false);
+              _convert(element, goodType);
             } else {
               // Use element's type
               _addToMap(className, k, newListEntry(k, _typeString(element[0])));
