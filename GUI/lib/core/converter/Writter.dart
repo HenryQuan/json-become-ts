@@ -166,12 +166,25 @@ abstract class Writter {
 
   /// Convert dart types to types in other languages
   /// - Map (object)
-  /// - List (array)
   /// - int
   /// - double
   /// - bool
   /// - dynamic
   String typeConverter(String type);
+  /// This check if the writter needs to construct this type
+  bool shouldConstruct(String type) {
+    switch (type) {
+      case 'Map':
+      case 'int':
+      case 'double':
+      case 'String':
+      case 'bool':
+      case 'dynamic':
+        return true;        
+      default:
+        return false;
+    }
+  }
   /// Usually it is `int`, `double` but it must not be `Map` or `List` 
   String newEntry(String key, String type);
   /// This is used only for `Map` 

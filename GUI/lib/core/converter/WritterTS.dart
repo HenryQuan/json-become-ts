@@ -49,6 +49,7 @@ class WritterTS extends Writter {
 
   @override
   String writeClass(String className, String variables, Set<String> keys) {
+    // TODO: save type as well (so that we can create new objects)
     final goodClass = className.normaliseType();
     return '/** This is the `$goodClass` class */\n' +
       'class $goodClass {\n' +
