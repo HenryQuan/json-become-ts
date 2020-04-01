@@ -17,12 +17,16 @@ extension MapExtension<T, K> on Map<T, K> {
 
     Map<T, K> merged = Map.of(first);
     second.forEach((key, value) {
-      // Add new keys
       if (!merged.containsKey(key)) {
+        // Add new keys
         merged[key] = value;
       } else {
-        // Even if we have the same key, Map should still be checked
-        if (value is Map) {
+        // The key exists but still some checks need to be done
+        if (merged[key] == null) {
+          // If first has a null value, use second value
+          merged[key] = value;
+        } else if (value is Map) {
+          // Even if we have the same key, Map should still be checked
           merged[key] = merge(first[key] as Map<T, K>, second[key] as Map<T, K>) as K;
         }
       }

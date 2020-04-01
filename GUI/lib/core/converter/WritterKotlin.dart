@@ -1,50 +1,52 @@
 import 'Writter.dart';
 import 'StringExtension.dart';
 
-class WritterTS extends Writter {
-  WritterTS(String jsonString, String jsonName) : super(jsonString, jsonName);
+class WritterKotlin extends Writter {
+  WritterKotlin(String jsonString, String jsonName) : super(jsonString, jsonName);
 
   @override
   String typeConverter(String type) {
     // So usually type is the key name and we just need to upper first letter
-    String ts = type.upperFirst();
+    String kotlin = type.upperFirst();
     switch (type) {
       case 'Map':
-        ts = 'Map';
+        kotlin = 'Map';
         break;
       case 'int':
+        kotlin = 'Int';
+        break;
       case 'double':
-        ts = 'number';
+        kotlin = 'Double';
         break;
       case 'String':
-        ts = 'string';
+        // Same name
         break;
       case 'bool':
-        ts = 'boolean';
+        kotlin = 'Boolean';
         break;
       case 'dynamic':
-        ts = 'any';
+        kotlin = 'Any';
         break;
       default:
         break;
     }
 
-    return ts;
+    return kotlin;
   }
 
   @override
   String newEntry(String key, String type) {
-    return '$spaces${key.normaliseVariable()}: ${typeConverter(type)};';
+    return '${spaces}val ${key.normaliseVariable()}: ${typeConverter(type)}';
   }
 
   @override
   String newListEntry(String key, String type) {
-    return '$spaces${key.normaliseVariable()}: ${typeConverter(type)}[];';
+    return '${spaces}val ${key.normaliseVariable()}: List<${typeConverter(type)}>';
   }
 
   @override
   String newMapEntry(String key, String type) {
-    return '$spaces${key.normaliseVariable()}: Map<string, ${typeConverter(type)}>;';
+    return '${spaces}val ${key.normaliseVariable()}: Map<String, ${typeConverter(type)}>';
   }
 
   @override
@@ -54,8 +56,8 @@ class WritterTS extends Writter {
     return '/** This is the `$goodClass` class */\n' +
       'class $goodClass {\n' +
       variables + 
-      '\n\n${spaces}constructor(json) {\n' +
-      keys.map((e) => '$spaces${spaces}this.${e.normaliseVariable()} = json["$e"];').join('\n') +
+      '\n\n${spaces}constructor(json: Any?) {\n' +
+      keys.map((e) => '$spaces${spaces}this.${e.normaliseVariable()} = json["$e"]').join('\n') +
       '\n$spaces}' +
       '\n}';
   }

@@ -1,7 +1,9 @@
 import 'package:GUI/core/converter/Converter.dart';
 import 'package:GUI/core/converter/WritterDart.dart';
+import 'package:GUI/core/converter/WritterKotlin.dart';
 import 'package:GUI/core/converter/WritterTS.dart';
 import 'package:GUI/ui/page/AboutPage.dart';
+import 'package:GUI/ui/widget/OutputWidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   final List<Converter> converters = [
     Converter('Dart', (String jsonString, String jsonName) => WritterDart(jsonString, jsonName)),
     Converter('TypeScript', (String jsonString, String jsonName) => WritterTS(jsonString, jsonName)),
+    Converter('Kotlin', (String jsonString, String jsonName) => WritterKotlin(jsonString, jsonName)),
   ];
 
   @override
@@ -96,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Divider(height: 0),
                       Expanded(
-                        child: buildRightPanel()
+                        child: OutputWidget(output: output)
                       ),
                     ],
                   ),
@@ -107,37 +110,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
-
-  Widget buildRightPanel() {
-    if (this.output == null) {
-      // Match textfield style
-      return Align(
-        alignment: Alignment.topLeft,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Output',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ),
-      );
-    } else {
-      final outputList = this.output.split('\n');
-      return Scrollbar(
-        child: ListView.builder(
-          itemCount: outputList.length,
-          padding: EdgeInsets.all(8),
-          itemExtent: 20,
-          itemBuilder: (context, index) {
-            return Text(
-              outputList[index],
-              style: TextStyle(fontSize: 16),
-            );
-          },
-        ),
-      );
-    }                  
   }
 
   /// This `Row` contains three `FlatButton` with `icons`
