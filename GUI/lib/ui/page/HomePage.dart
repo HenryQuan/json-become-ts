@@ -37,59 +37,64 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('JSON: Become TS'),
-        leading: IconButton(
-          icon: Icon(Icons.help_outline), 
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                // return object of type Dialog
-                return AlertDialog(
-                  title: Text('How does it work?'),
-                  content: Text('JSON: Become TS helps you to generate classes that you can use as a base.\nSimply paste your json string and give it a name. Then, choose the language you want to convert to and press Convert.\n' +
-                    'This is not perfect and often you need to adjust generated classes manually.\n\n' +
-                    'If you have found any issues, please open an issue on GitHub.\nHenry'),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: new Text('GitHub'),
-                      onPressed: () {
-                        launch('https://github.com/HenryQuan/json-become-ts/issues');
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    FlatButton(
-                      child: new Text('OK'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-          tooltip: 'How does it work',
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.info_outline), 
-            onPressed: () => Navigator.push(context, 
-              MaterialPageRoute(builder: (c) => AboutPage(), fullscreenDialog: true)
-            ),
-            tooltip: 'About JSON: Become TS',
+    return Banner(
+      location: BannerLocation.bottomEnd,
+      message: 'WIP',
+      color: Colors.blue,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('JSON: Become TS'),
+          leading: IconButton(
+            icon: Icon(Icons.help_outline), 
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  // return object of type Dialog
+                  return AlertDialog(
+                    title: Text('How does it work?'),
+                    content: Text('JSON: Become TS helps you to generate classes that you can use as a base.\nSimply paste your json string and give it a name. Then, choose the language you want to convert to and press Convert.\n' +
+                      'This is not perfect and often you need to adjust generated classes manually.\n\n' +
+                      'If you have found any issues, please open an issue on GitHub.\nHenry'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: new Text('GitHub'),
+                        onPressed: () {
+                          launch('https://github.com/HenryQuan/json-become-ts/issues');
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      FlatButton(
+                        child: new Text('OK'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            tooltip: 'How does it work',
           ),
-        ],
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.info_outline), 
+              onPressed: () => Navigator.push(context, 
+                MaterialPageRoute(builder: (c) => AboutPage(), fullscreenDialog: true)
+              ),
+              tooltip: 'About JSON: Become TS',
+            ),
+          ],
+        ),
+        // Builder is used to show snack bar
+        body: buildBody(context),
+        bottomNavigationBar: Builder(builder: (c) {
+          return BottomAppBar(
+            child: buildBottomButtons(c),
+          );
+        }),
       ),
-      // Builder is used to show snack bar
-      body: buildBody(context),
-      bottomNavigationBar: Builder(builder: (c) {
-        return BottomAppBar(
-          child: buildBottomButtons(c),
-        );
-      }),
     );
   }
 
