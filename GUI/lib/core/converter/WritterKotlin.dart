@@ -2,7 +2,7 @@ import 'Writter.dart';
 import 'StringExtension.dart';
 
 class WritterKotlin extends Writter {
-  WritterKotlin(String jsonString, String jsonName) : super(jsonString, jsonName);
+  WritterKotlin(String jsonString, String jsonName, int mapThreshold) : super(jsonString, jsonName, mapThreshold);
 
   @override
   String typeConverter(String type) {

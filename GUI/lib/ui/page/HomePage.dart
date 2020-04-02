@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   String input;
   String output;
   String jsonName;
+  bool forceMap = false;
   // This handles pasting text from clipboard
   final controller = TextEditingController();
   // This is for indicating the text field of name input
@@ -30,9 +31,9 @@ class _HomePageState extends State<HomePage> {
 
   int selectedChip = 0;
   final List<Converter> converters = [
-    Converter('Dart', (String jsonString, String jsonName) => WritterDart(jsonString, jsonName)),
-    Converter('TypeScript', (String jsonString, String jsonName) => WritterTS(jsonString, jsonName)),
-    Converter('Kotlin', (String jsonString, String jsonName) => WritterKotlin(jsonString, jsonName)),
+    Converter('Dart', (String jsonString, String jsonName, int threshold) => WritterDart(jsonString, jsonName, threshold)),
+    Converter('TypeScript', (String jsonString, String jsonName, int threshold) => WritterTS(jsonString, jsonName, threshold)),
+    Converter('Kotlin', (String jsonString, String jsonName, int threshold) => WritterKotlin(jsonString, jsonName, threshold)),
   ];
 
   @override
@@ -185,7 +186,7 @@ class _HomePageState extends State<HomePage> {
               label: Text('Convert'),
               onPressed: () {
                 if (nameKey.currentState.validate()) {
-                  final writter = converters[selectedChip].writter(this.input, this.jsonName);
+                  final writter = converters[selectedChip].writter(this.input, this.jsonName, this.forceMap ? 0 : 10);
                   if (writter.isValid()) {
                     setState(() {
                       this.output = writter.toString();
@@ -240,22 +241,39 @@ class _HomePageState extends State<HomePage> {
       key: nameKey,
       child: Column(
         children: <Widget>[
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                validator: (value) {
-                  if (value.isEmpty) return '*name is necessary';
-                  return null;
-                },
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Name',
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) return '*name is necessary';
+                      return null;
+                    },
+                    decoration: InputDecoration.collapsed(
+                      hintText: 'Name',
+                    ),
+                    autocorrect: false,
+                    autofocus: false,
+                    onChanged: (t) => this.jsonName = t,
+                  ),
                 ),
-                autocorrect: false,
-                autofocus: false,
-                onChanged: (t) => this.jsonName = t,
               ),
-            ),
+              Row(
+                children: <Widget>[
+                  Text('Force map'),
+                  Checkbox(
+                    value: this.forceMap, 
+                    onChanged: (mode) {
+                      setState(() {
+                        this.forceMap = mode;
+                      });
+                    }
+                  ),
+                ],
+              ),
+            ],
           ),
           Divider(height: dividerLength),
           Expanded(

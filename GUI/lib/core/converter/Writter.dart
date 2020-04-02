@@ -15,7 +15,7 @@ abstract class Writter {
   /// How many spaces here
   final spaces = List.filled(2, ' ').join();
   /// Check when to use `Map` 
-  final mapThreshold = 10;
+  int mapThreshold;
   /// Whether map should be merged
   bool shouldMerge = true;
 
@@ -24,7 +24,9 @@ abstract class Writter {
   String get errorMessage => _errorMessage;
   String _errorLine;
 
-  Writter(String jsonString, String jsonName) {
+  /// By default, the threshold to use map is `10`
+  Writter(String jsonString, String jsonName, int mapThreshold) {
+    this.mapThreshold = mapThreshold;
     // Decode it into a map
     try {
       json = jsonDecode(jsonString);
@@ -113,6 +115,9 @@ abstract class Writter {
         } else {
           // Not a map so loop through everything
           map.keys.forEach((k) {
+            if (k=="modules_tree") {
+              print("a");
+            }
             final element = map[k];
             final goodType = k.normaliseType();
             if (element is Map) {
@@ -158,7 +163,12 @@ abstract class Writter {
   }
 
   /// Returns the type string of anything
-  String _typeString(dynamic object) => object.runtimeType.toString();
+  String _typeString(dynamic object) {
+    final type = object.runtimeType.toString();
+    // Null means we don't know so can be anything
+    if (type == 'Null') return 'dynamic';
+    return type;
+  }
 
   /// This does a check if the key is already used
   _addToMap(String className, String key, String entry) {

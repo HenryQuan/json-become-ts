@@ -2,7 +2,7 @@ import 'Writter.dart';
 import 'StringExtension.dart';
 
 class WritterTS extends Writter {
-  WritterTS(String jsonString, String jsonName) : super(jsonString, jsonName);
+  WritterTS(String jsonString, String jsonName, int mapThreshold) : super(jsonString, jsonName, mapThreshold);
 
   @override
   String typeConverter(String type) {
