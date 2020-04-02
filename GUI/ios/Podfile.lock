@@ -8,6 +8,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - Flutter (from `Flutter`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
   - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
