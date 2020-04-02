@@ -54,7 +54,7 @@ class WritterKotlin extends Writter {
     // TODO: save type as well (so that we can create new objects)
     final goodClass = className.normaliseType();
     return '/** This is the `$goodClass` class */\n' +
-      'data class $goodClass(\n' +
+      'data class $goodClass (\n' +
       variables.split('\n').join(',\n') + 
       '\n)';
   }

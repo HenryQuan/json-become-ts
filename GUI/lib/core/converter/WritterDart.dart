@@ -31,9 +31,16 @@ class WritterDart extends Writter {
     return '/// This is the `$goodClass` class\n' +
       'class $goodClass {\n' +
       variables + 
-      '\n\n$spaces$goodClass(json) {\n' +
+      '\n\n$spaces$goodClass.fromJson(Map<String, dynamic> json) {\n' +
+      // fromJson method
       keys.map((e) => '$spaces${spaces}this.${e.normaliseVariable()} = json["$e"];').join('\n') +
-      '\n$spaces}' +
-      '\n}';
+      '\n$spaces}\n\n' +
+      // toJson method
+      '${spaces}Map<String, dynamic> toJson() {\n' +
+      '$spaces${spaces}return {\n' +
+      keys.map((e) => '$spaces$spaces$spaces"$e": this.${e.normaliseVariable()},').join('\n') +
+      '\n$spaces$spaces};\n' +
+      '$spaces}\n' +
+      '}';
   }
 }
