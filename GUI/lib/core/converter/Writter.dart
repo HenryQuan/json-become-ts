@@ -132,8 +132,14 @@ abstract class Writter {
                 _convert(element, goodType);
               }
             } else if (element is List) {
-              _addToMap(className, k, newListEntry(k, goodType));
-              _convert(element, goodType);
+              // Check if the first entry is map or not
+              final firstElement = element.first;
+              if (_isObjectOrArray(firstElement)) {
+                _addToMap(className, k, newListEntry(k, goodType));
+                _convert(element, goodType);
+              } else {
+                _addToMap(className, k, newListEntry(k, _typeString(firstElement)));
+              }
             } else {
               // Just use element's type
               _addToMap(className, k, newEntry(k, _typeString(element)));
