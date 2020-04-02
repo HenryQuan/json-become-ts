@@ -9,6 +9,6 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
-    "firebase-tools": "^7.16.1"
+    "firebase-tools": "^8.0.0"
   }
 }
