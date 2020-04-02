@@ -18,7 +18,7 @@ data class Output (
   val registered: String,
   val latitude: Double,
   val longitude: Double,
-  val tag: List<Tag>,
+  val tag: List<String>,
   val friend: List<Friend>,
   val greeting: String,
   val favoriteFruit: String

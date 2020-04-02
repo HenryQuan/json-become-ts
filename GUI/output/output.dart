@@ -18,7 +18,7 @@ class Output {
   String registered;
   double latitude;
   double longitude;
-  List<Tag> tag;
+  List<String> tag;
   List<Friend> friend;
   String greeting;
   String favoriteFruit;

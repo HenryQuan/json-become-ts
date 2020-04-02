@@ -77,8 +77,8 @@ abstract class Writter {
   /// Merge all files into one
   String toString() {
     if (!isValid() || !_isObjectOrArray(json)) return 'null';
-    // Join all lists first in the map and join again in the list
-    return _classes.keys.map((e) => writeClass(e, _classes[e].toString(), _classes[e].keys)).toList().join('\n\n');
+    // Join all lists first in the map and join again in the list, add extra new line to the entire string
+    return _classes.keys.map((e) => writeClass(e, _classes[e].toString(), _classes[e].keys)).toList().join('\n\n') + '\n';
   }
 
   /// Convert json into any language
@@ -119,7 +119,7 @@ abstract class Writter {
               if (element.length > mapThreshold && element.sameChildrenType()) {
                 // This is a Map
                 final firstElement = element.values.first;
-                if (firstElement is Map) {
+                if (_isObjectOrArray(firstElement)) {
                   _addToMap(className, k, newMapEntry(k, goodType));
                   // Keep getting everything
                   _convert(element, goodType);
@@ -135,9 +135,11 @@ abstract class Writter {
               // Check if the first entry is map or not
               final firstElement = element.first;
               if (_isObjectOrArray(firstElement)) {
+                // More inside so go deeper
                 _addToMap(className, k, newListEntry(k, goodType));
                 _convert(element, goodType);
               } else {
+                // Plain type set and stop
                 _addToMap(className, k, newListEntry(k, _typeString(firstElement)));
               }
             } else {

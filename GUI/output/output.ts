@@ -18,7 +18,7 @@ class Output {
   registered: string;
   latitude: number;
   longitude: number;
-  tag: Tag[];
+  tag: string[];
   friend: Friend[];
   greeting: string;
   favoriteFruit: string;
