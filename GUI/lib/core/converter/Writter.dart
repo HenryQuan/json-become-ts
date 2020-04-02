@@ -132,15 +132,20 @@ abstract class Writter {
                 _convert(element, goodType);
               }
             } else if (element is List) {
-              // Check if the first entry is map or not
-              final firstElement = element.first;
-              if (_isObjectOrArray(firstElement)) {
-                // More inside so go deeper
-                _addToMap(className, k, newListEntry(k, goodType));
-                _convert(element, goodType);
+              // Make sure it is not empty
+              if (element.isNotEmpty) {
+                // Check if the first entry is map or not
+                final firstElement = element.first;
+                if (_isObjectOrArray(firstElement)) {
+                  // More inside so go deeper
+                  _addToMap(className, k, newListEntry(k, goodType));
+                  _convert(element, goodType);
+                } else {
+                  // Plain type set and stop
+                  _addToMap(className, k, newListEntry(k, _typeString(firstElement)));
+                }
               } else {
-                // Plain type set and stop
-                _addToMap(className, k, newListEntry(k, _typeString(firstElement)));
+                _addToMap(className, k, newListEntry(k, 'dynamic'));
               }
             } else {
               // Just use element's type
