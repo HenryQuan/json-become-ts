@@ -7,6 +7,7 @@ import 'package:GUI/ui/widget/OutputWidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// HomePage class
 class HomePage extends StatefulWidget {
@@ -39,6 +40,39 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('JSON: Become TS'),
+        leading: IconButton(
+          icon: Icon(Icons.help_outline), 
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                // return object of type Dialog
+                return AlertDialog(
+                  title: Text('How does it work?'),
+                  content: Text('JSON: Become TS helps you to generate classes that you can use as a base.\nSimply paste your json string and give it a name. Then, choose the language you want to convert to and press Convert.\n' +
+                    'This is not perfect and often you need to adjust generated classes manually.\n\n' +
+                    'If you have found any issues, please open an issue on GitHub.\nHenry'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: new Text('GitHub'),
+                      onPressed: () {
+                        launch('https://github.com/HenryQuan/json-become-ts/issues');
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    FlatButton(
+                      child: new Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          tooltip: 'How does it work',
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.info_outline), 
