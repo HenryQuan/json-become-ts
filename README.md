@@ -22,3 +22,5 @@ The next step is to support optional types. It might be possible with the help o
 
 ### Special thanks
 Checkout [this website](https://next.json-generator.com/) for generating random json.
+
+For legacy JS code, check aeda8cb.
