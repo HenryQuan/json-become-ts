@@ -1,27 +1,27 @@
 /// This is the `Output` class
 class Output {
-  String id;
-  int index;
-  String guid;
-  bool isActive;
-  String balance;
-  String picture;
-  int age;
-  String eyeColor;
-  String name;
-  String gender;
-  String company;
-  String email;
-  String phone;
-  String addres;
-  String about;
-  String registered;
-  double latitude;
-  double longitude;
-  List<String> tag;
-  List<Friend> friend;
-  String greeting;
-  String favoriteFruit;
+  String? id;
+  int? index;
+  String? guid;
+  bool? isActive;
+  String? balance;
+  String? picture;
+  int? age;
+  String? eyeColor;
+  String? name;
+  String? gender;
+  String? company;
+  String? email;
+  String? phone;
+  String? addres;
+  String? about;
+  String? registered;
+  double? latitude;
+  double? longitude;
+  List<String>? tag;
+  List<Friend>? friend;
+  String? greeting;
+  String? favoriteFruit;
 
   Output.fromJson(Map<String, dynamic> json) {
     this.id = json["_id"];
@@ -78,8 +78,8 @@ class Output {
 
 /// This is the `Friend` class
 class Friend {
-  int id;
-  String name;
+  int? id;
+  String? name;
 
   Friend.fromJson(Map<String, dynamic> json) {
     this.id = json["id"];

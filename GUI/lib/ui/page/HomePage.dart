@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
             },
             tooltip: 'How does it work',
           ),
-          actions: <Widget>[
+          actions: [
             IconButton(
               icon: Icon(Icons.info_outline),
               onPressed: () => Navigator.push(
@@ -119,10 +119,10 @@ class _HomePageState extends State<HomePage> {
   SafeArea buildBody(BuildContext context) {
     return SafeArea(
       child: Column(
-        children: <Widget>[
+        children: [
           Expanded(
             child: Row(
-              children: <Widget>[
+              children: [
                 Expanded(
                   child: buildLeftForm(),
                 ),
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       ConstrainedBox(
-                        constraints: BoxConstraints(maxHeight: 64),
+                        constraints: BoxConstraints(maxHeight: 48.5),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: converters.length,
@@ -167,85 +167,88 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// This `Row` contains three `FlatButton` with `icons`
-  Row buildBottomButtons(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Tooltip(
-            message: 'Paste JSON string from clipboard',
-            child: TextButton.icon(
-              icon: Icon(Icons.content_paste),
-              label: Text('Paste'),
-              onPressed: () {
-                // Paste text into input
-                Clipboard.getData(Clipboard.kTextPlain).then((value) {
-                  final clipboardText = value?.text ?? '';
-                  controller.text = clipboardText;
-                  // NOTE: Update input as well here so that it won't be null because text field wasn't changed
-                  this.input = clipboardText;
-                });
+  Widget buildBottomButtons(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Tooltip(
+              message: 'Paste JSON string from clipboard',
+              child: TextButton.icon(
+                icon: Icon(Icons.content_paste),
+                label: Text('Paste'),
+                onPressed: () {
+                  // Paste text into input
+                  Clipboard.getData(Clipboard.kTextPlain).then((value) {
+                    final clipboardText = value?.text ?? '';
+                    controller.text = clipboardText;
+                    // NOTE: Update input as well here so that it won't be null because text field wasn't changed
+                    this.input = clipboardText;
+                  });
 
-                // Clear up outputs
-                setState(() {
-                  this.output = '';
-                });
-              },
+                  // Clear up outputs
+                  setState(() {
+                    this.output = '';
+                  });
+                },
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Tooltip(
-            message: 'JSON -> Code',
-            child: TextButton.icon(
-              icon: Icon(Icons.compare_arrows),
-              label: Text('Convert'),
-              onPressed: () {
-                if (nameKey.currentState?.validate() ?? false) {
-                  final writter = converters[selectedChip].writter(
-                      this.input, this.jsonName, this.forceMap ? 0 : 10);
-                  if (writter.isValid()) {
-                    setState(() {
-                      this.output = writter.toString();
-                    });
-                  } else {
-                    // Select the line that has an error
-                    controller.selection =
-                        writter.errorSelection(input) ?? TextSelection;
-                    // Show a snack bar
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(writter.errorMessage),
-                      ),
-                    );
+          Expanded(
+            child: Tooltip(
+              message: 'JSON -> Code',
+              child: TextButton.icon(
+                icon: Icon(Icons.compare_arrows),
+                label: Text('Convert'),
+                onPressed: () {
+                  if (nameKey.currentState?.validate() ?? false) {
+                    final writter = converters[selectedChip].writter(
+                        this.input, this.jsonName, this.forceMap ? 0 : 10);
+                    if (writter.isValid()) {
+                      setState(() {
+                        this.output = writter.toString();
+                      });
+                    } else {
+                      // Select the line that has an error
+                      controller.selection =
+                          writter.errorSelection(input) ?? TextSelection;
+                      // Show a snack bar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(writter.errorMessage),
+                        ),
+                      );
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Tooltip(
-            message: 'Copy generated code into clipboard',
-            child: TextButton.icon(
-              icon: Icon(Icons.content_copy),
-              label: Text('Copy'),
-              onPressed: () {
-                String text = "Nothing was copied...";
-                Clipboard.setData(ClipboardData(text: this.output));
-                text = "Output has been copied :)";
+          Expanded(
+            child: Tooltip(
+              message: 'Copy generated code into clipboard',
+              child: TextButton.icon(
+                icon: Icon(Icons.content_copy),
+                label: Text('Copy'),
+                onPressed: () {
+                  String text = "Nothing was copied...";
+                  Clipboard.setData(ClipboardData(text: this.output));
+                  text = "Output has been copied :)";
 
-                // Show a snack bar
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    duration: Duration(seconds: 1),
-                    content: Text(text),
-                  ),
-                );
-              },
+                  // Show a snack bar
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 1),
+                      content: Text(text),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -254,45 +257,49 @@ class _HomePageState extends State<HomePage> {
     return Form(
       key: nameKey,
       child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) return '*name is necessary';
-                      return null;
-                    },
-                    decoration: InputDecoration.collapsed(
-                      hintText: 'Name',
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) return '*name is necessary';
+                        return null;
+                      },
+                      decoration: InputDecoration.collapsed(
+                        hintText: 'Name',
+                      ),
+                      autocorrect: false,
+                      autofocus: false,
+                      onChanged: (t) => this.jsonName = t,
                     ),
-                    autocorrect: false,
-                    autofocus: false,
-                    onChanged: (t) => this.jsonName = t,
                   ),
                 ),
-              ),
-              Row(
-                children: <Widget>[
-                  Text('Force map'),
-                  Checkbox(
-                      value: this.forceMap,
-                      onChanged: (mode) {
-                        setState(() {
-                          this.forceMap = mode ?? false;
-                        });
-                      }),
-                ],
-              ),
-            ],
+                Row(
+                  children: [
+                    Text('Force map'),
+                    Checkbox(
+                        value: this.forceMap,
+                        onChanged: (mode) {
+                          setState(() {
+                            this.forceMap = mode ?? false;
+                          });
+                        }),
+                  ],
+                ),
+              ],
+            ),
           ),
           Divider(height: dividerLength),
           Expanded(
             child: Container(
               margin: EdgeInsets.all(8),
-              child: Scrollbar(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
                 child: TextFormField(
                   validator: (value) {
                     if (value?.isEmpty ?? true)

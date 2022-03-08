@@ -103,13 +103,13 @@ abstract class Writter {
       } else if (object[0] != null) {
         _convert(object[0], className);
       }
-    } else if (object is Map) {
+    } else if (object is Map<String, dynamic>) {
       if (object.length == 0) {
         // Empty map
         _addToMap(className, key, newEntry(key, 'dynamic'));
       } else {
         // The key must be a string because it is JSON
-        final Map map = object;
+        final Map<String, dynamic> map = object;
         if (map.length > mapThreshold && map.sameChildrenType()) {
           // This is a Map
           final firstElement = object.values.first;
@@ -124,11 +124,8 @@ abstract class Writter {
         } else {
           // Not a map so loop through everything
           map.keys.forEach((k) {
-            if (k == "modules_tree") {
-              print("a");
-            }
             final element = map[k];
-            final goodType = k.runtimeType.toString();
+            final goodType = k.normaliseType();
             if (element is Map) {
               if (element.length > mapThreshold && element.sameChildrenType()) {
                 // This is a Map
@@ -147,6 +144,7 @@ abstract class Writter {
                 _convert(element, goodType);
               }
             } else if (element is List) {
+              print(element);
               // Make sure it is not empty
               if (element.isNotEmpty) {
                 // Check if the first entry is map or not

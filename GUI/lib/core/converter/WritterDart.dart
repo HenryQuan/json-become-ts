@@ -21,12 +21,12 @@ class WritterDart extends Writter {
 
   @override
   String newListEntry(String key, String type) {
-    return '${spaces}List<${typeConverter(type)}> ${key.normaliseVariable()};';
+    return '${spaces}List<${typeConverter(type)}>? ${key.normaliseVariable()};';
   }
 
   @override
   String newMapEntry(String key, String type) {
-    return '${spaces}Map<String, ${typeConverter(type)}> ${key.normaliseVariable()};';
+    return '${spaces}Map<String, ${typeConverter(type)}>? ${key.normaliseVariable()};';
   }
 
   @override
