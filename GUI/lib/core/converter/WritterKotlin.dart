@@ -2,7 +2,11 @@ import 'Writter.dart';
 import 'StringExtension.dart';
 
 class WritterKotlin extends Writter {
-  WritterKotlin(String jsonString, String jsonName, int mapThreshold) : super(jsonString, jsonName, mapThreshold);
+  WritterKotlin(
+    String jsonString,
+    String jsonName,
+    int mapThreshold,
+  ) : super(jsonString, jsonName, mapThreshold);
 
   @override
   String typeConverter(String type) {
@@ -54,8 +58,8 @@ class WritterKotlin extends Writter {
     // TODO: save type as well (so that we can create new objects)
     final goodClass = className.normaliseType();
     return '/** This is the `$goodClass` class */\n' +
-      'data class $goodClass (\n' +
-      variables.split('\n').join(',\n') + 
-      '\n)';
+        'data class $goodClass (\n' +
+        variables.split('\n').join(',\n') +
+        '\n)';
   }
 }

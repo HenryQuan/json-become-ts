@@ -11,16 +11,16 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// HomePage class
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  String input;
-  String output;
-  String jsonName;
+  String input = '';
+  String output = '';
+  String jsonName = '';
   bool forceMap = false;
   // This handles pasting text from clipboard
   final controller = TextEditingController();
@@ -31,9 +31,18 @@ class _HomePageState extends State<HomePage> {
 
   int selectedChip = 0;
   final List<Converter> converters = [
-    Converter('Dart', (String jsonString, String jsonName, int threshold) => WritterDart(jsonString, jsonName, threshold)),
-    Converter('TypeScript', (String jsonString, String jsonName, int threshold) => WritterTS(jsonString, jsonName, threshold)),
-    Converter('Kotlin', (String jsonString, String jsonName, int threshold) => WritterKotlin(jsonString, jsonName, threshold)),
+    Converter(
+        'Dart',
+        (String jsonString, String jsonName, int threshold) =>
+            WritterDart(jsonString, jsonName, threshold)),
+    Converter(
+        'TypeScript',
+        (String jsonString, String jsonName, int threshold) =>
+            WritterTS(jsonString, jsonName, threshold)),
+    Converter(
+        'Kotlin',
+        (String jsonString, String jsonName, int threshold) =>
+            WritterKotlin(jsonString, jsonName, threshold)),
   ];
 
   @override
@@ -46,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text('JSON: Become TS'),
           leading: IconButton(
-            icon: Icon(Icons.help_outline), 
+            icon: Icon(Icons.help_outline),
             onPressed: () {
               showDialog(
                 context: context,
@@ -54,18 +63,21 @@ class _HomePageState extends State<HomePage> {
                   // return object of type Dialog
                   return AlertDialog(
                     title: Text('How does it work?'),
-                    content: Text('JSON: Become TS helps you to generate classes that you can use as a base.\nSimply paste your json string and give it a name. Then, choose the language you want to convert to and press Convert.\n' +
-                      'This is not perfect and often you need to adjust generated classes manually.\n\n' +
-                      'If you have found any issues, please open an issue on GitHub.\nHenry'),
-                    actions: <Widget>[
-                      FlatButton(
+                    content: Text(
+                        'JSON: Become TS helps you to generate classes that you can use as a base.\nSimply paste your json string and give it a name. Then, choose the language you want to convert to and press Convert.\n' +
+                            'This is not perfect and often you need to adjust generated classes manually.\n\n' +
+                            'If you have found any issues, please open an issue on GitHub.\nHenry'),
+                    actions: [
+                      TextButton(
                         child: new Text('GitHub'),
                         onPressed: () {
-                          launch('https://github.com/HenryQuan/json-become-ts/issues');
+                          launch(
+                            'https://github.com/HenryQuan/json-become-ts/issues',
+                          );
                           Navigator.of(context).pop();
                         },
                       ),
-                      FlatButton(
+                      TextButton(
                         child: new Text('OK'),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -80,9 +92,13 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.info_outline), 
-              onPressed: () => Navigator.push(context, 
-                MaterialPageRoute(builder: (c) => AboutPage(), fullscreenDialog: true)
+              icon: Icon(Icons.info_outline),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (c) => AboutPage(),
+                  fullscreenDialog: true,
+                ),
               ),
               tooltip: 'About JSON: Become TS',
             ),
@@ -113,10 +129,10 @@ class _HomePageState extends State<HomePage> {
                 VerticalDivider(width: dividerLength),
                 Expanded(
                   child: Column(
-                    children: <Widget>[
+                    children: [
                       ConstrainedBox(
                         constraints: BoxConstraints(maxHeight: 64),
-                        child:ListView.builder(
+                        child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: converters.length,
                           padding: EdgeInsets.all(8),
@@ -138,9 +154,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Divider(height: 0),
-                      Expanded(
-                        child: OutputWidget(output: output)
-                      ),
+                      Expanded(child: OutputWidget(output: output)),
                     ],
                   ),
                 ),
@@ -159,20 +173,21 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: Tooltip(
             message: 'Paste JSON string from clipboard',
-            child: FlatButton.icon(
+            child: TextButton.icon(
               icon: Icon(Icons.content_paste),
               label: Text('Paste'),
               onPressed: () {
                 // Paste text into input
                 Clipboard.getData(Clipboard.kTextPlain).then((value) {
-                  controller.text = value.text;
+                  final clipboardText = value?.text ?? '';
+                  controller.text = clipboardText;
                   // NOTE: Update input as well here so that it won't be null because text field wasn't changed
-                  this.input = value.text;
+                  this.input = clipboardText;
                 });
 
                 // Clear up outputs
                 setState(() {
-                  this.output = null;  
+                  this.output = '';
                 });
               },
             ),
@@ -181,21 +196,23 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: Tooltip(
             message: 'JSON -> Code',
-            child: FlatButton.icon(
+            child: TextButton.icon(
               icon: Icon(Icons.compare_arrows),
               label: Text('Convert'),
               onPressed: () {
-                if (nameKey.currentState.validate()) {
-                  final writter = converters[selectedChip].writter(this.input, this.jsonName, this.forceMap ? 0 : 10);
+                if (nameKey.currentState?.validate() ?? false) {
+                  final writter = converters[selectedChip].writter(
+                      this.input, this.jsonName, this.forceMap ? 0 : 10);
                   if (writter.isValid()) {
                     setState(() {
                       this.output = writter.toString();
                     });
                   } else {
                     // Select the line that has an error
-                    controller.selection = writter.errorSelection(input) ?? TextSelection;
+                    controller.selection =
+                        writter.errorSelection(input) ?? TextSelection;
                     // Show a snack bar
-                    Scaffold.of(context).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(writter.errorMessage),
                       ),
@@ -209,19 +226,16 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: Tooltip(
             message: 'Copy generated code into clipboard',
-            child: FlatButton.icon(
+            child: TextButton.icon(
               icon: Icon(Icons.content_copy),
               label: Text('Copy'),
               onPressed: () {
                 String text = "Nothing was copied...";
-                // I think it will crash if you copy `null`
-                if (this.output != null) {
-                  Clipboard.setData(ClipboardData(text: this.output));
-                  text = "Output has been copied :)";
-                }
+                Clipboard.setData(ClipboardData(text: this.output));
+                text = "Output has been copied :)";
 
                 // Show a snack bar
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     duration: Duration(seconds: 1),
                     content: Text(text),
@@ -248,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     validator: (value) {
-                      if (value.isEmpty) return '*name is necessary';
+                      if (value?.isEmpty ?? true) return '*name is necessary';
                       return null;
                     },
                     decoration: InputDecoration.collapsed(
@@ -264,13 +278,12 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Text('Force map'),
                   Checkbox(
-                    value: this.forceMap, 
-                    onChanged: (mode) {
-                      setState(() {
-                        this.forceMap = mode;
-                      });
-                    }
-                  ),
+                      value: this.forceMap,
+                      onChanged: (mode) {
+                        setState(() {
+                          this.forceMap = mode ?? false;
+                        });
+                      }),
                 ],
               ),
             ],
@@ -282,7 +295,8 @@ class _HomePageState extends State<HomePage> {
               child: Scrollbar(
                 child: TextFormField(
                   validator: (value) {
-                    if (value.isEmpty) return '*this field must not be empty';
+                    if (value?.isEmpty ?? true)
+                      return '*this field must not be empty';
                     return null;
                   },
                   controller: controller,

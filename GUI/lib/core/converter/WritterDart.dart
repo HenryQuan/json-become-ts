@@ -2,7 +2,11 @@ import 'Writter.dart';
 import 'StringExtension.dart';
 
 class WritterDart extends Writter {
-  WritterDart(String jsonString, String jsonName, int mapThreshold) : super(jsonString, jsonName, mapThreshold);
+  WritterDart(
+    String jsonString,
+    String jsonName,
+    int mapThreshold,
+  ) : super(jsonString, jsonName, mapThreshold);
 
   @override
   String typeConverter(String type) {
@@ -12,7 +16,7 @@ class WritterDart extends Writter {
 
   @override
   String newEntry(String key, String type) {
-    return '$spaces${typeConverter(type)} ${key.normaliseVariable()};';
+    return '$spaces${typeConverter(type)}? ${key.normaliseVariable()};';
   }
 
   @override
@@ -29,18 +33,24 @@ class WritterDart extends Writter {
   String writeClass(String className, String variables, Set<String> keys) {
     final goodClass = className.normaliseType();
     return '/// This is the `$goodClass` class\n' +
-      'class $goodClass {\n' +
-      variables + 
-      '\n\n$spaces$goodClass.fromJson(Map<String, dynamic> json) {\n' +
-      // fromJson method
-      keys.map((e) => '$spaces${spaces}this.${e.normaliseVariable()} = json["$e"];').join('\n') +
-      '\n$spaces}\n\n' +
-      // toJson method
-      '${spaces}Map<String, dynamic> toJson() {\n' +
-      '$spaces${spaces}return {\n' +
-      keys.map((e) => '$spaces$spaces$spaces"$e": this.${e.normaliseVariable()},').join('\n') +
-      '\n$spaces$spaces};\n' +
-      '$spaces}\n' +
-      '}';
+        'class $goodClass {\n' +
+        variables +
+        '\n\n$spaces$goodClass.fromJson(Map<String, dynamic> json) {\n' +
+        // fromJson method
+        keys
+            .map((e) =>
+                '$spaces${spaces}this.${e.normaliseVariable()} = json["$e"];')
+            .join('\n') +
+        '\n$spaces}\n\n' +
+        // toJson method
+        '${spaces}Map<String, dynamic> toJson() {\n' +
+        '$spaces${spaces}return {\n' +
+        keys
+            .map((e) =>
+                '$spaces$spaces$spaces"$e": this.${e.normaliseVariable()},')
+            .join('\n') +
+        '\n$spaces$spaces};\n' +
+        '$spaces}\n' +
+        '}';
   }
 }

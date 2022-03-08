@@ -3,7 +3,10 @@ extension MapExtension<T, K> on Map<T, K> {
   Map<T, K> mergeChildren() {
     // Only merge if all children have the same type
     if (this.sameChildrenType() && this.values.first is Map) {
-      return this.values.fold({}, (prev, curr) => merge(prev, curr as Map));
+      return this.values.fold(
+        {},
+        (prev, curr) => merge(prev, curr as Map<T, K>),
+      );
     }
 
     // This is already merged
@@ -27,7 +30,10 @@ extension MapExtension<T, K> on Map<T, K> {
           merged[key] = value;
         } else if (value is Map) {
           // Even if we have the same key, Map should still be checked
-          merged[key] = merge(first[key] as Map<T, K>, second[key] as Map<T, K>) as K;
+          merged[key] = merge(
+            first[key] as Map<T, K>,
+            second[key] as Map<T, K>,
+          ) as K;
         }
       }
     });
@@ -39,7 +45,7 @@ extension MapExtension<T, K> on Map<T, K> {
   bool sameChildrenType() {
     if (this.isEmpty) return false;
 
-    Type type;
+    Type? type;
     return this.values.every((k) {
       // If type is null, set it to the first entry value
       type = type ?? k.runtimeType;
