@@ -23,4 +23,4 @@ The next step is to support optional types. It might be possible with the help o
 ### Special thanks
 Checkout [this website](https://next.json-generator.com/) for generating random json.
 
-For legacy JS code, check aeda8cb.
+For legacy JS code, check them [here](https://github.com/HenryQuan/json-become-ts/tree/aeda8cbfdea101b1464e6ce987c3918346f04e51).
