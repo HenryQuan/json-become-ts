@@ -1,26 +1,38 @@
 # JSON: Become TS
-Work in progress JSON to TypeScript converter.
 
-## About
-It was called `json2ts` but others have used this name so I changed it to `JSON: Become TS`. Yes, the naming is inspired by a certain game. 
+A Bun-powered TypeScript rewrite of JSON: Become TS that keeps the original `src/writter` layout and generates output files for modern targets.
 
-It is another tool that I need for [WoWs Info](https://github.com/HenryQuan/WoWs-Info-Re). Other tools I found only generate everything in a single file and that's not what I want. Therefore, `JSON: Become TS` will help you to create files and directories automatically.
+## Supported targets
 
-### Dart support
-Dart support has been added but it might need some manual adjustments due to the type `number` can be both `int` and `double`.
+- TypeScript
+- JavaScript
+- Python
+- Rust
+- Swift (`Codable`)
+- Kotlin (`kotlinx.serialization`)
+- Dart
+- XML
+- YAML
+- Protobuf (`proto3`)
 
-### Features
-- Support `number`, `string`, `boolean`
-- Support `array` and auto detect `map`
-- Remove illegal characters
+## Usage
 
-The next step is to support optional types. It might be possible with the help of [obj-join](https://github.com/HenryQuan/obj-join). After that, I will add the option to generate classes instead of interfaces. 
+```bash
+bun run ./src/json-become-ts.ts ./src/example/json/modules.json \
+  --lang typescript,javascript,python,rust,swift,kotlin,dart,xml,yaml,protobuf \
+  --output ./generated
+```
 
-## Example
-- Check the [example](https://github.com/HenryQuan/json-become-ts/tree/master/src/example) folder to see what it does
-- Check the [modules](https://github.com/HenryQuan/json-become-ts/tree/master/src/example/modules) folder for dart
+Generated files are written to `./generated/<target>/` so they can be downloaded, archived, or committed as needed.
 
-### Special thanks
-Checkout [this website](https://next.json-generator.com/) for generating random json.
+## Scripts
 
-For legacy JS code, check them [here](https://github.com/HenryQuan/json-become-ts/tree/aeda8cbfdea101b1464e6ce987c3918346f04e51).
+- `bun run build`
+- `bun run test`
+- `bun run all`
+
+## Notes
+
+- The Flutter GUI remains in `GUI/`.
+- The CLI defaults to TypeScript output when no `--lang` flag is provided.
+- Map detection still follows the original threshold-based approach and can be tuned with `--map-threshold`.

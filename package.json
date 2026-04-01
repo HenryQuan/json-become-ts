@@ -1,14 +1,11 @@
 {
+  "name": "json-become-ts",
+  "version": "0.1.0",
+  "type": "module",
   "scripts": {
-    "build": "babel src -d lib",
-    "test": "node lib/json-become-ts.js src/example/json/modules.json",
-    "clean": "rm -rf array lib object ultimate testMap gameVersion modules",
-    "all": "yarn clean && yarn build && yarn test"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
-    "firebase-tools": "^8.0.0"
+    "build": "bun build ./src/json-become-ts.ts --outfile ./dist/json-become-ts.js --target bun",
+    "test": "bun run ./src/json-become-ts.ts ./src/example/json/modules.json --lang typescript,javascript,python,rust,swift,kotlin,dart,xml,yaml,protobuf --output ./generated-test && test -f ./generated-test/typescript/Modules.ts && test -f ./generated-test/javascript/Modules.js && test -f ./generated-test/python/Modules.py && test -f ./generated-test/rust/modules.rs && test -f ./generated-test/swift/Modules.swift && test -f ./generated-test/kotlin/Modules.kt && test -f ./generated-test/dart/modules.dart && test -f ./generated-test/xml/modules.xml && test -f ./generated-test/yaml/modules.yaml && test -f ./generated-test/protobuf/modules.proto",
+    "clean": "rm -rf dist generated-test",
+    "all": "bun run clean && bun run build && bun run test"
   }
 }

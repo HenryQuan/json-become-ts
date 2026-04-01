@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+  <status>ok</status>
+  <meta>
+    <count>11</count>
+    <page_total>1</page_total>
+    <total>11</total>
+    <limit>30</limit>
+    <page>1</page>
+  </meta>
+  <data>
+    <entry key="3255218000">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>76</torpedo_speed>
+          <shot_speed>0.5</shot_speed>
+          <max_damage>21366</max_damage>
+          <distance>8</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F0</name>
+      <image>https://example.com/module-0.png</image>
+      <tag>PJUT977_TORP3_SHIM</tag>
+      <module_id_str>PJUT977</module_id_str>
+      <module_id>3255218000</module_id>
+      <type>Torpedoes</type>
+      <price_credit>0</price_credit>
+    </entry>
+    <entry key="3255218001">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>77</torpedo_speed>
+          <shot_speed>0.6</shot_speed>
+          <max_damage>21367</max_damage>
+          <distance>8.1</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F1</name>
+      <image>https://example.com/module-1.png</image>
+      <tag>PJUT978_TORP3_SHIM</tag>
+      <module_id_str>PJUT978</module_id_str>
+      <module_id>3255218001</module_id>
+      <type>Torpedoes</type>
+      <price_credit>1000</price_credit>
+    </entry>
+    <entry key="3255218002">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>78</torpedo_speed>
+          <shot_speed>0.7</shot_speed>
+          <max_damage>21368</max_damage>
+          <distance>8.2</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F2</name>
+      <image>https://example.com/module-2.png</image>
+      <tag>PJUT979_TORP3_SHIM</tag>
+      <module_id_str>PJUT979</module_id_str>
+      <module_id>3255218002</module_id>
+      <type>Torpedoes</type>
+      <price_credit>2000</price_credit>
+    </entry>
+    <entry key="3255218003">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>79</torpedo_speed>
+          <shot_speed>0.8</shot_speed>
+          <max_damage>21369</max_damage>
+          <distance>8.3</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F3</name>
+      <image>https://example.com/module-3.png</image>
+      <tag>PJUT980_TORP3_SHIM</tag>
+      <module_id_str>PJUT980</module_id_str>
+      <module_id>3255218003</module_id>
+      <type>Torpedoes</type>
+      <price_credit>3000</price_credit>
+    </entry>
+    <entry key="3255218004">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>80</torpedo_speed>
+          <shot_speed>0.9</shot_speed>
+          <max_damage>21370</max_damage>
+          <distance>8.4</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F4</name>
+      <image>https://example.com/module-4.png</image>
+      <tag>PJUT981_TORP3_SHIM</tag>
+      <module_id_str>PJUT981</module_id_str>
+      <module_id>3255218004</module_id>
+      <type>Torpedoes</type>
+      <price_credit>4000</price_credit>
+    </entry>
+    <entry key="3255218005">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>81</torpedo_speed>
+          <shot_speed>1</shot_speed>
+          <max_damage>21371</max_damage>
+          <distance>8.5</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F5</name>
+      <image>https://example.com/module-5.png</image>
+      <tag>PJUT982_TORP3_SHIM</tag>
+      <module_id_str>PJUT982</module_id_str>
+      <module_id>3255218005</module_id>
+      <type>Torpedoes</type>
+      <price_credit>5000</price_credit>
+    </entry>
+    <entry key="3255218006">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>82</torpedo_speed>
+          <shot_speed>1.1</shot_speed>
+          <max_damage>21372</max_damage>
+          <distance>8.6</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F6</name>
+      <image>https://example.com/module-6.png</image>
+      <tag>PJUT983_TORP3_SHIM</tag>
+      <module_id_str>PJUT983</module_id_str>
+      <module_id>3255218006</module_id>
+      <type>Torpedoes</type>
+      <price_credit>6000</price_credit>
+    </entry>
+    <entry key="3255218007">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>83</torpedo_speed>
+          <shot_speed>1.2</shot_speed>
+          <max_damage>21373</max_damage>
+          <distance>8.7</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F7</name>
+      <image>https://example.com/module-7.png</image>
+      <tag>PJUT984_TORP3_SHIM</tag>
+      <module_id_str>PJUT984</module_id_str>
+      <module_id>3255218007</module_id>
+      <type>Torpedoes</type>
+      <price_credit>7000</price_credit>
+    </entry>
+    <entry key="3255218008">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>84</torpedo_speed>
+          <shot_speed>1.3</shot_speed>
+          <max_damage>21374</max_damage>
+          <distance>8.8</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F8</name>
+      <image>https://example.com/module-8.png</image>
+      <tag>PJUT985_TORP3_SHIM</tag>
+      <module_id_str>PJUT985</module_id_str>
+      <module_id>3255218008</module_id>
+      <type>Torpedoes</type>
+      <price_credit>8000</price_credit>
+    </entry>
+    <entry key="3255218009">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>85</torpedo_speed>
+          <shot_speed>1.4</shot_speed>
+          <max_damage>21375</max_damage>
+          <distance>8.9</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F9</name>
+      <image>https://example.com/module-9.png</image>
+      <tag>PJUT986_TORP3_SHIM</tag>
+      <module_id_str>PJUT986</module_id_str>
+      <module_id>3255218009</module_id>
+      <type>Torpedoes</type>
+      <price_credit>9000</price_credit>
+    </entry>
+    <entry key="3255218010">
+      <profile>
+        <torpedoes>
+          <torpedo_speed>86</torpedo_speed>
+          <shot_speed>1.5</shot_speed>
+          <max_damage>21376</max_damage>
+          <distance>9</distance>
+        </torpedoes>
+      </profile>
+      <name>Type F10</name>
+      <image>https://example.com/module-10.png</image>
+      <tag>PJUT987_TORP3_SHIM</tag>
+      <module_id_str>PJUT987</module_id_str>
+      <module_id>3255218010</module_id>
+      <type>Torpedoes</type>
+      <price_credit>10000</price_credit>
+    </entry>
+  </data>
+</modules>
