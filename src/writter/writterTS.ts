@@ -28,8 +28,8 @@ export class WritterTS extends Writter {
           (type) => `Record<string, ${type}>`,
           (type) => `${type} | null`,
         );
-        const optional = field.nullable ? '?' : '';
-        return `  ${field.name}${optional}: ${type};`;
+        const optionalMarker = field.nullable ? '?' : '';
+        return `  ${field.name}${optionalMarker}: ${type};`;
       })
       .join('\n');
 

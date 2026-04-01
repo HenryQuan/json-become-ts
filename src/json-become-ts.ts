@@ -145,7 +145,18 @@ function outputFileName(language: SupportedLanguage, writter: Writter): string {
 }
 
 function showUsage(): void {
-  console.log(`Usage:\n  bun run ./src/json-become-ts.ts <file_path> [--lang ts,swift,...] [--output ./generated]\n\nSupported targets:\n  ${[...new Set(Object.keys(WRITTERS))].join(', ')}`);
+  console.log(`Usage:
+  bun run ./src/json-become-ts.ts <file_path> [options]
+
+Options:
+  --lang ts,swift,...     Comma-separated target list
+  --output ./generated    Output directory
+  --root-name Modules     Override the root model name
+  --map-threshold 10      Threshold used for map detection
+  --no-clean              Keep existing output files
+
+Supported targets:
+  ${[...new Set(Object.keys(WRITTERS))].join(', ')}`);
 }
 
 main();
